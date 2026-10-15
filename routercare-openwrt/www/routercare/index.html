@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>RouterCare — состояние роутера</title>
+  <style>
+    :root{color-scheme:dark;--bg:#080d18;--panel:#111a2b;--panel2:#17243a;--line:#263754;--text:#f2f6ff;--muted:#9bacc6;--blue:#7ab7ff;--cyan:#63e6dc;--violet:#a78bfa;--green:#68e3ad;--amber:#ffd27a;--red:#ff8297;--shadow:0 18px 50px #02061766}
+    *{box-sizing:border-box}html{min-height:100%;background:var(--bg)}body{min-height:100vh;margin:0;background:radial-gradient(850px 480px at 100% -10%,#164e6380 0,transparent 62%),radial-gradient(780px 520px at -20% 35%,#43388555 0,transparent 65%),var(--bg);color:var(--text);font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:.01em}
+    .wrap{max-width:1120px;margin:auto;padding:34px 28px 58px}.top{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:30px;animation:rise .55s both}.brand{display:flex;gap:15px;align-items:center}.logo{position:relative;width:54px;height:54px;border-radius:18px;background:linear-gradient(145deg,var(--cyan),#4f8cff 52%,var(--violet));display:grid;place-items:center;font-size:28px;color:#07111d;box-shadow:0 8px 28px #3986ff55;overflow:hidden}.logo:after{content:"";position:absolute;inset:-40%;border:1px solid #ffffff55;border-radius:40%;transform:rotate(35deg);animation:orbit 12s linear infinite}.eyebrow{color:var(--cyan);font-size:11px;letter-spacing:.17em;text-transform:uppercase;font-weight:750}.brand h1{font-size:26px;letter-spacing:-.04em;margin:1px 0 0}.button{border:1px solid #405578;background:linear-gradient(135deg,#203956,#19253d);color:var(--text);padding:11px 16px;border-radius:13px;font:inherit;font-weight:650;cursor:pointer;transition:transform .2s ease,border-color .2s ease,background .2s ease,box-shadow .2s ease}.button:hover{transform:translateY(-2px);border-color:#74c7e8;background:linear-gradient(135deg,#254767,#253257);box-shadow:0 9px 24px #02061755}.button:focus-visible{outline:3px solid #63e6dc99;outline-offset:3px}.button:active{transform:translateY(0) scale(.98)}.button:disabled{opacity:.65;cursor:wait;transform:none}.hero{position:relative;isolation:isolate;overflow:hidden;padding:27px 30px;border:1px solid #385477;border-radius:24px;background:linear-gradient(112deg,#142b42 0%,#16223a 55%,#1b1e3b 100%);box-shadow:var(--shadow);margin-bottom:19px;animation:rise .65s .08s both}.hero:after{content:"";position:absolute;z-index:-1;width:280px;height:280px;right:4%;top:-170px;border-radius:50%;background:#63e6dc22;filter:blur(4px);animation:breathe 7s ease-in-out infinite}.hero h2{font-size:23px;letter-spacing:-.025em;margin:0 0 5px}.hero p{color:#b3c3da;margin:0;max-width:690px}.actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:18px}.actions .button{background:linear-gradient(120deg,#237b83,#3559a4);border-color:#56c7d4}.small{font-size:13px;color:#adc0d8}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.card{position:relative;overflow:hidden;background:linear-gradient(145deg,#121e31,#101827);border:1px solid var(--line);border-radius:19px;padding:19px 20px;min-height:127px;box-shadow:0 8px 22px #0206172b;transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease;animation:rise .55s both}.card:nth-child(1){animation-delay:.10s}.card:nth-child(2){animation-delay:.15s}.card:nth-child(3){animation-delay:.20s}.card:nth-child(4){animation-delay:.25s}.card:nth-child(5){animation-delay:.30s}.card:nth-child(6){animation-delay:.35s}.card:nth-child(7){animation-delay:.40s}.card:nth-child(8){animation-delay:.45s}.card:nth-child(9){animation-delay:.50s}.card:before{content:"";position:absolute;left:0;top:20px;bottom:20px;width:3px;border-radius:0 4px 4px 0;background:linear-gradient(var(--cyan),var(--violet));opacity:.8}.card:hover{transform:translateY(-3px);border-color:#4b7195;box-shadow:0 14px 32px #02061755}.card-head{display:flex;align-items:center;gap:10px}.card-icon{width:30px;height:30px;flex:0 0 30px;display:grid;place-items:center;border:1px solid #47708c88;border-radius:10px;background:linear-gradient(145deg,#1d4555,#27284d);color:#86e5e2;font-size:16px;font-weight:750;box-shadow:0 5px 14px #03081766;transition:transform .25s ease,box-shadow .25s ease,color .25s ease}.card:hover .card-icon{transform:translateY(-2px) rotate(-4deg);color:#c1fff8;box-shadow:0 7px 20px #42d5d555}.label{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.035em}.value{font-size:20px;font-weight:700;letter-spacing:-.02em;margin-top:10px;overflow-wrap:anywhere}.service{display:flex;align-items:center;justify-content:space-between;gap:8px}.pill{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:6px 11px;background:#1a2a40;color:var(--muted);font-size:12px;white-space:nowrap}.dot{width:8px;height:8px;border-radius:50%;background:#8294b2}.pill.running{color:var(--green);background:#12352f}.pill.running .dot{background:var(--green);box-shadow:0 0 12px #6ee7b777;animation:pulse 2.2s ease-in-out infinite}.pill.stopped{color:var(--amber);background:#3a2d19}.pill.stopped .dot{background:var(--amber)}.pill.not_found{color:var(--muted)}.footer{margin-top:20px;color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.notice{padding:15px 17px;border:1px solid #685632;background:linear-gradient(110deg,#292316,#211d18);color:#f1dcae;border-radius:15px;margin-top:19px;font-size:13px;box-shadow:0 8px 22px #0206172b}.error{border-color:#6b3440;background:#2b161d;color:#ffd3da}.success{border-color:#1e5a49;background:#102b26;color:#c4f5e3}
+    @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}@keyframes pulse{50%{box-shadow:0 0 0 5px #6ee7b71a,0 0 14px #6ee7b766}}@keyframes breathe{50%{transform:scale(1.18);opacity:.65}}@keyframes orbit{to{transform:rotate(395deg)}}
+    @media(max-width:760px){.wrap{padding:24px 18px 42px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{padding:24px}.brand h1{font-size:23px}}
+    @media(max-width:520px){.wrap{padding:18px 14px 32px}.top{align-items:flex-start;flex-direction:column;margin-bottom:22px}.grid{grid-template-columns:1fr;gap:11px}.card{min-height:0;padding:17px 18px}.hero{padding:21px;border-radius:20px}.hero h2{font-size:21px}.value{font-size:18px}.footer{display:grid}.actions .small{flex-basis:100%}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="top">
+      <div class="brand"><div class="logo" aria-hidden="true">⌁</div><div><div class="eyebrow">локальная панель</div><h1>RouterCare</h1></div></div>
+      <button class="button" id="refresh" type="button">↻ Обновить состояние</button>
+    </header>
+    <section class="hero">
+      <h2 id="headline">Проверяю роутер…</h2>
+      <p id="subhead">Читаю системные сведения и состояние служб. Настройки сети не меняются.</p>
+      <div class="actions"><button class="button" id="mihomo-check" type="button">✓ Проверить конфиг Mihomo</button><span class="small" id="mihomo-result" aria-live="polite">Проверка запускает только mihomo -t.</span></div>
+    </section>
+    <section class="grid" aria-label="Системная информация">
+      <article class="card"><div class="card-head"><span class="card-icon" aria-hidden="true">⌂</span><div class="label">Модель роутера</div></div><div class="value" id="model">—</div></article>
+      <article class="card"><div class="card-head"><span class="card-icon" aria-hidden="true">◈</span><div class="label">OpenWrt</div></div><div class="value" id="release">—</div></article>
+      <article class="card"><div class="card-head"><span class="card-icon" aria-hidden="true">⟠</span><div class="label">Архитектура</div></div><div class="value" id="arch">—</div></article>
+      <article class="card"><div class="card-head"><span class="card-icon" aria-hidden="true">▤</span><div class="label">Свободно на overlay</div></div><div class="value" id="overlay">—</div></article>
+      <article class="card"><div class="card-head"><span class="card-icon" aria-hidden="true">⌁</span><div class="label">Zapret</div></div><div class="value service"><span>Перехват DPI</span><span class="pill" id="zapret"><i class="dot"></i><span>—</span></span></div></article>
+      <article class="card"><div class="card-head"><span class="card-icon" aria-hidden="true">⛨</span><div class="label">Zapret2</div></div><div class="value service"><span>Второй движок</span><span class="pill" id="zapret2"><i class="dot"></i><span>—</span></span></div></article>
+      <article class="card"><div class="card-head"><span class="card-icon" aria-hidden="true">⇄</span><div class="label">Mihomo</div></div><div class="value service"><span>VPN-маршрутизация</span><span class="pill" id="mihomo"><i class="dot"></i><span>—</span></span></div></article>
+      <article class="card"><div class="card-head"><span class="card-icon" aria-hidden="true">▦</span><div class="label">Плата</div></div><div class="value" id="board">—</div></article>
+      <article class="card"><div class="card-head"><span class="card-icon" aria-hidden="true">◷</span><div class="label">Последняя проверка</div></div><div class="value" id="checked">—</div></article>
+    </section>
+    <div class="notice" id="message">Панель только показывает состояние. Она не отправляет данные на сторонние серверы и не меняет правила OpenWrt.</div>
+    <footer class="footer"><span>RouterCare 0.2.1 · диагностика и проверка</span><span>Обновления выполняются вручную после проверки.</span></footer>
+  </main>
+  <script>
+    const labels={running:"Работает",stopped:"Остановлена",not_found:"Не найдена"};
+    const text=(id,value)=>{document.getElementById(id).textContent=value||"Не указано"};
+    function setService(id,state){const el=document.getElementById(id);el.className="pill "+(state||"not_found");el.querySelector("span").textContent=labels[state]||"Неизвестно"}
+    async function refresh(){
+      const button=document.getElementById("refresh"), message=document.getElementById("message");button.disabled=true;message.className="notice";message.textContent="Получаю локальный отчёт от роутера…";
+      try{
+        const response=await fetch("/cgi-bin/routercare-status",{cache:"no-store",credentials:"same-origin"});if(!response.ok)throw new Error("HTTP "+response.status);const d=await response.json();
+        text("model",d.model||d.board);text("board",d.board);text("release",d.release);text("arch",d.arch);text("overlay",Number.isFinite(d.overlay_free_kib)?(d.overlay_free_kib/1024).toFixed(1)+" МБ":"нет данных");
+        setService("zapret",d.services?.zapret);setService("zapret2",d.services?.zapret2);setService("mihomo",d.services?.mihomo);
+        text("checked",d.checked_at||new Date().toLocaleString("ru-RU"));text("headline","Состояние роутера получено");document.getElementById("subhead").textContent="Панель прочитала базовые сведения. Ни один сетевой параметр не изменён.";
+        message.textContent="Диагностический отчёт обрабатывается локально. Внешние серверы и аналитика не используются.";
+      }catch(e){text("headline","Не удалось получить отчёт");document.getElementById("subhead").textContent="Проверьте, что CGI установлен и веб-сервер OpenWrt обслуживает /cgi-bin/.";message.className="notice error";message.textContent="Ошибка связи с локальным API: "+e.message+". Конфигурация роутера не менялась."}
+      finally{button.disabled=false}
+    }
+    async function checkMihomo(){
+      const button=document.getElementById("mihomo-check"), result=document.getElementById("mihomo-result"), message=document.getElementById("message");button.disabled=true;result.textContent="Проверяю…";
+      try{const response=await fetch("/cgi-bin/routercare-mihomo-check",{cache:"no-store",credentials:"same-origin"});if(!response.ok)throw new Error("HTTP "+response.status);const d=await response.json();
+        if(d.result==="valid"){result.textContent="Конфиг прошёл проверку";message.className="notice success";message.textContent="mihomo -t завершился успешно. Файл не менялся, его содержимое не выводилось."}
+        else if(d.result==="invalid"){result.textContent="Проверка завершилась ошибкой";message.className="notice error";message.textContent="Mihomo сообщил об ошибке конфигурации. Детальный вывод и секреты не показываются; проверьте журнал Mihomo локально по SSH."}
+        else if(d.result==="no_config"){result.textContent="Конфиг не найден";message.textContent="Не найден стандартный файл Mihomo. Ничего не изменено."}
+        else if(d.result==="no_binary"){result.textContent="Mihomo не найден";message.textContent="Команда mihomo недоступна. Ничего не установлено и не изменено."}
+        else{result.textContent="Проверка недоступна";message.textContent="Не удалось выполнить локальную проверку. Ничего не изменено."}
+      }catch(e){result.textContent="Нет связи с проверкой";message.className="notice error";message.textContent="Локальная проверка не ответила: "+e.message}
+      finally{button.disabled=false}
+    }
+    document.getElementById("refresh").addEventListener("click",refresh);document.getElementById("mihomo-check").addEventListener("click",checkMihomo);refresh();
+  </script>
+</body>
+</html>
