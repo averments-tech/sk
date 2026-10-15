@@ -1,0 +1,24 @@
+name: Test RouterCare
+
+on:
+  push:
+    paths:
+      - 'routercare-openwrt/**'
+      - '.github/workflows/test-routercare.yml'
+  pull_request:
+    paths:
+      - 'routercare-openwrt/**'
+      - '.github/workflows/test-routercare.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run local regression tests
+        run: python3 routercare-openwrt/tests/test_routercare.py
