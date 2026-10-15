@@ -1,0 +1,70 @@
+name: Build Zapret2 for AX3000T
+
+on:
+  push:
+    paths:
+      - '.github/workflows/build-zapret2-openwrt.yml'
+      - 'zapret2-build/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - name: Install host tools
+        run: sudo apt-get update && sudo apt-get install -y build-essential clang flex bison g++ gawk gcc-multilib g++-multilib gettext git libncurses-dev libssl-dev python3-setuptools rsync unzip zlib1g-dev file wget zstd
+
+      - name: Download and verify OpenWrt SDK
+        shell: bash
+        run: |
+          set -euo pipefail
+          sdk_archive='openwrt-sdk-25.12.5-mediatek-filogic_gcc-14.3.0_musl.Linux-x86_64.tar.zst'
+          sdk_url="https://downloads.openwrt.org/releases/25.12.5/targets/mediatek/filogic/${sdk_archive}"
+          wget --https-only --show-progress "$sdk_url" -O "$RUNNER_TEMP/$sdk_archive"
+          echo 'ff4a38a397caa2cfe1c39e18f84ddede14878221b3593c3f2c4cfe24e3ec4c25  '"$RUNNER_TEMP/$sdk_archive" | sha256sum --check --strict
+          mkdir "$RUNNER_TEMP/sdk"
+          tar --zstd -xf "$RUNNER_TEMP/$sdk_archive" -C "$RUNNER_TEMP/sdk" --strip-components=1
+          echo "SDK_DIR=$RUNNER_TEMP/sdk" >> "$GITHUB_ENV"
+
+      - name: Fetch official Zapret2 source
+        run: git clone --depth 1 --branch v1.0.5.2 https://github.com/bol-van/zapret2.git "$RUNNER_TEMP/zapret2"
+
+      - name: Prepare SDK packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$SDK_DIR"
+          ./scripts/feeds update base packages
+          ./scripts/feeds install libnetfilter-queue zlib libcap luajit
+          cp -R "$RUNNER_TEMP/zapret2/docs/compile/openwrt/." .
+          mkdir -p package/zapret
+          cp -R "$RUNNER_TEMP/zapret2/nfq2" package/zapret/nfqws2
+          cp -R "$RUNNER_TEMP/zapret2/mdig" package/zapret/mdig
+          cp -R "$RUNNER_TEMP/zapret2/ip2net" package/zapret/ip2net
+          make defconfig
+
+      - name: Compile packages for mediatek/filogic
+        run: make -C "$SDK_DIR" -j2 package/nfqws2/compile package/mdig/compile package/ip2net/compile
+
+      - name: Collect packages and build metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/zapret2-artifacts"
+          find "$SDK_DIR/bin/packages" -type f \( -name 'nfqws2_*.apk' -o -name 'mdig_*.apk' -o -name 'ip2net_*.apk' -o -name 'nfqws2_*.ipk' -o -name 'mdig_*.ipk' -o -name 'ip2net_*.ipk' \) -exec cp -v {} "$RUNNER_TEMP/zapret2-artifacts/" \;
+          test "$(find "$RUNNER_TEMP/zapret2-artifacts" -type f | wc -l)" -ge 3
+          printf 'Zapret2 upstream: v1.0.5.2\nOpenWrt SDK: 25.12.5 mediatek/filogic\nRouter profile: Xiaomi AX3000T / aarch64_cortex-a53\nBuilt packages:\n' > "$RUNNER_TEMP/zapret2-artifacts/BUILD-INFO.txt"
+          find "$RUNNER_TEMP/zapret2-artifacts" -maxdepth 1 -type f \( -name '*.apk' -o -name '*.ipk' \) -printf '%f\n' | sort >> "$RUNNER_TEMP/zapret2-artifacts/BUILD-INFO.txt"
+          (cd "$RUNNER_TEMP/zapret2-artifacts" && sha256sum *.apk *.ipk > SHA256SUMS)
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: zapret2-v1.0.5.2-openwrt-25.12.5-mediatek-filogic
+          path: ${{ runner.temp }}/zapret2-artifacts/*
+          if-no-files-found: error
+          retention-days: 30
