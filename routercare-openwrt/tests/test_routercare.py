@@ -63,8 +63,11 @@ class RouterCareTests(unittest.TestCase):
 
     def test_ui_keeps_reduced_motion_and_local_assets(self) -> None:
         self.assertIn("prefers-reduced-motion:reduce", self.html)
+        self.assertIn("signal-grid", self.html)
+        self.assertIn("skip-link", self.html)
+        self.assertIn("color-scheme:light", self.html)
         self.assertNotRegex(self.html, r"https?://(?:fonts\.googleapis|cdnjs|cdn\.)")
-        self.assertIn("RouterCare 0.3.3", self.html)
+        self.assertIn("RouterCare 0.4.0", self.html)
 
     def test_inline_javascript_parses(self) -> None:
         scripts = re.findall(r"<script>(.*?)</script>", self.html, re.DOTALL)
