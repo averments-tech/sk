@@ -1,0 +1,53 @@
+#!/bin/sh
+# Read-only, same-origin status endpoint. No command execution from request data.
+
+json_escape() {
+    printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g; s/\r//g; s/\n/ /g'
+}
+
+service_state() {
+    svc_name=$1
+    process_name=$2
+    init_path="/etc/init.d/$svc_name"
+    if [ -x "$init_path" ]; then
+        if "$init_path" status >/dev/null 2>&1; then
+            printf 'running'
+        elif command -v pidof >/dev/null 2>&1 && pidof "$process_name" >/dev/null 2>&1; then
+            printf 'running'
+        else
+            printf 'stopped'
+        fi
+    elif command -v pidof >/dev/null 2>&1 && pidof "$process_name" >/dev/null 2>&1; then
+        printf 'running'
+    else
+        printf 'not_found'
+    fi
+}
+
+if [ "${REQUEST_METHOD:-GET}" != GET ]; then
+    printf 'Status: 405 Method Not Allowed\r\n'
+    printf 'Content-Type: application/json; charset=utf-8\r\n\r\n'
+    printf '{"error":"GET only"}\n'
+    exit 0
+fi
+
+model=$(sed -n "s/^DISTRIB_DESCRIPTION=['\"]\?\(.*\)['\"]\?$/\1/p" /etc/openwrt_release 2>/dev/null | head -n 1)
+release=$(sed -n "s/^DISTRIB_RELEASE=['\"]\?\(.*\)['\"]\?$/\1/p" /etc/openwrt_release 2>/dev/null | head -n 1)
+arch=$(sed -n "s/^DISTRIB_ARCH=['\"]\?\(.*\)['\"]\?$/\1/p" /etc/openwrt_release 2>/dev/null | head -n 1)
+board=$(ubus call system board 2>/dev/null | jsonfilter -e '@.model' 2>/dev/null || true)
+free_kib=$(df -k /overlay 2>/dev/null | awk 'NR == 2 {print $4}')
+case "$free_kib" in ''|*[!0-9]*) free_kib=null ;; esac
+
+printf 'Content-Type: application/json; charset=utf-8\r\n'
+printf 'Cache-Control: no-store\r\n'
+printf 'X-Content-Type-Options: nosniff\r\n\r\n'
+printf '{"ok":true,"model":"%s","board":"%s","release":"%s","arch":"%s","overlay_free_kib":%s,"services":{"zapret":"%s","zapret2":"%s","mihomo":"%s"},"checked_at":"%s"}\n' \
+    "$(json_escape "$model")" \
+    "$(json_escape "$board")" \
+    "$(json_escape "$release")" \
+    "$(json_escape "$arch")" \
+    "$free_kib" \
+    "$(service_state zapret nfqws)" \
+    "$(service_state zapret2 nfqws2)" \
+    "$(service_state mihomo mihomo)" \
+    "$(date '+%Y-%m-%dT%H:%M:%S%z' 2>/dev/null || true)"
