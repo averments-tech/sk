@@ -12,7 +12,7 @@
     :focus-visible{outline:3px solid #70e4dbb5;outline-offset:3px}
     @keyframes rise{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
     @media(max-width:1050px){.sidebar{width:218px}.main{margin-left:218px;padding-left:27px;padding-right:27px}.services{grid-template-columns:1fr}.service-card{min-height:0}.service-desc{margin-top:11px}.service-foot{margin-top:9px}}
-    @media(max-width:720px){.sidebar{position:sticky;top:0;bottom:auto;width:auto;height:auto;padding:10px 14px;border-right:0;border-bottom:1px solid #21334d;display:block;background:#0c1627f2;backdrop-filter:blur(14px)}.brand{padding:0;gap:10px}.brand-mark{width:36px;height:36px;border-radius:12px}.brand-mark svg{width:21px;height:21px}.brand-name{font-size:13px}.brand-sub{font-size:8px;margin-top:3px}.nav-caption,.side-spacer,.local-card,.side-version{display:none}.nav{display:flex;gap:5px;margin-top:10px;overflow-x:auto;scrollbar-width:none}.nav::-webkit-scrollbar{display:none}.nav a{flex:0 0 auto;padding:8px 10px;font-size:11px}.nav a svg{width:15px;height:15px;flex-basis:15px}.main{margin:0;padding:19px 17px 32px}.topbar{margin-bottom:24px}.hero{padding:22px 21px;min-height:178px}.hero-visual{right:0;opacity:.55}.hero-content{max-width:72%}.hero p{font-size:12px}.services{grid-template-columns:repeat(3,minmax(0,1fr))}.service-card{padding:14px}.service-head{align-items:flex-start;flex-direction:column}.service-title{gap:8px}.service-icon{width:32px;height:32px}.pill{margin-left:40px}.lower-grid{grid-template-columns:1fr}}
+    @media(max-width:720px){#overview,#zapret,#mihomo,#system{scroll-margin-top:118px}.sidebar{position:sticky;top:0;bottom:auto;width:auto;height:auto;padding:10px 14px;border-right:0;border-bottom:1px solid #21334d;display:block;background:#0c1627f2;backdrop-filter:blur(14px)}.brand{padding:0;gap:10px}.brand-mark{width:36px;height:36px;border-radius:12px}.brand-mark svg{width:21px;height:21px}.brand-name{font-size:13px}.brand-sub{font-size:8px;margin-top:3px}.nav-caption,.side-spacer,.local-card,.side-version{display:none}.nav{display:flex;gap:5px;margin-top:10px;overflow-x:auto;scrollbar-width:none}.nav::-webkit-scrollbar{display:none}.nav a{flex:0 0 auto;padding:8px 10px;font-size:11px}.nav a svg{width:15px;height:15px;flex-basis:15px}.main{margin:0;padding:19px 17px 32px}.topbar{margin-bottom:24px}.hero{padding:22px 21px;min-height:178px}.hero-visual{right:0;opacity:.55}.hero-content{max-width:72%}.hero p{font-size:12px}.services{grid-template-columns:repeat(3,minmax(0,1fr))}.service-card{padding:14px}.service-head{align-items:flex-start;flex-direction:column}.service-title{gap:8px}.service-icon{width:32px;height:32px}.pill{margin-left:40px}.lower-grid{grid-template-columns:1fr}}
     @media(max-width:490px){.main{padding-left:13px;padding-right:13px}.crumb{font-size:10px}.connection{padding:7px 9px;font-size:9px}.icon-button{width:34px;height:34px}.page-title{align-items:flex-start;flex-direction:column;gap:6px;margin-bottom:17px}.page-title h1{font-size:28px}.page-title p{font-size:12px}.hero{border-radius:19px}.hero-content{max-width:100%}.hero-visual{right:-38px;top:38px;opacity:.20}.hero h2{font-size:20px}.services{grid-template-columns:1fr;gap:10px}.service-head{align-items:center;flex-direction:row}.pill{margin-left:0}.service-card{padding:14px 15px}.service-desc{font-size:10px}.section-head{align-items:flex-start;flex-direction:column}.check-row{align-items:flex-start;flex-direction:column}.button{width:100%}.panel{padding:16px}.system-grid{gap:7px}.system-item{padding:9px}.system-item strong{font-size:11px}.footer{display:grid}}
   </style>
 </head>
@@ -25,7 +25,7 @@
       </a>
       <div class="nav-caption">Управление</div>
       <nav class="nav">
-        <a class="active" href="#overview"><svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="3.5" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.7"/><rect x="13.5" y="3.5" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.7"/><rect x="3.5" y="13.5" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.7"/><rect x="13.5" y="13.5" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.7"/></svg>Обзор</a>
+        <a class="active" href="#overview" aria-current="location"><svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="3.5" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.7"/><rect x="13.5" y="3.5" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.7"/><rect x="3.5" y="13.5" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.7"/><rect x="13.5" y="13.5" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.7"/></svg>Обзор</a>
         <a href="#zapret"><svg viewBox="0 0 24 24" fill="none"><path d="M13.2 2.8 5.5 13h5.8l-.6 8.2L18.5 11h-5.8l.5-8.2Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>Zapret / DPI</a>
         <a href="#mihomo"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h10m0 0-3-3m3 3-3 3M20 17H10m0 0 3-3m-3 3 3 3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="18" cy="7" r="2" stroke="currentColor" stroke-width="1.7"/><circle cx="6" cy="17" r="2" stroke="currentColor" stroke-width="1.7"/></svg>Mihomo</a>
         <a href="#system"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.7"/><path d="M8 8h8v8H8zM9 1.8v2.5m6-2.5v2.5M9 19.7v2.5m6-2.5v2.5M1.8 9h2.5m-2.5 6h2.5m15.4-6h2.5m-2.5 6h2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Система</a>
@@ -63,7 +63,7 @@
         </section>
       </div>
       <div class="notice" id="message">Локальная панель не отправляет данные на сторонние серверы. Сейчас доступны просмотр состояния и проверка Mihomo-конфига.</div>
-      <footer class="footer"><span><strong>RouterCare 0.3.0</strong> · локальная диагностика</span><span>Для домашней сети · не публикуйте панель в интернет</span></footer>
+      <footer class="footer"><span><strong>RouterCare 0.3.1</strong> · локальная диагностика</span><span>Для домашней сети · не публикуйте панель в интернет</span></footer>
     </main>
   </div>
   <script>
@@ -91,6 +91,21 @@
       }catch(e){result.className="result bad";result.textContent="Нет связи с проверкой.";message.className="notice error";message.textContent="Локальная проверка не ответила: "+e.message}
       finally{button.disabled=false}
     }
+    const navLinks=[...document.querySelectorAll('.nav a[href^="#"]')];
+    function setActiveNav(id){for(const link of navLinks){const active=link.getAttribute("href")==="#"+id;link.classList.toggle("active",active);if(active)link.setAttribute("aria-current","location");else link.removeAttribute("aria-current")}}
+    for(const link of navLinks)link.addEventListener("click",()=>setActiveNav(link.getAttribute("href").slice(1)));
+    window.addEventListener("hashchange",()=>setActiveNav(location.hash.slice(1)||"overview"));
+    if("IntersectionObserver" in window){
+      const seen=new Map();
+      const navObserver=new IntersectionObserver(entries=>{
+        for(const entry of entries)seen.set(entry.target.id,entry.isIntersecting);
+        const visible=[...seen].filter(([,isVisible])=>isVisible).map(([id])=>document.getElementById(id)).filter(Boolean);
+        visible.sort((a,b)=>Math.abs(a.getBoundingClientRect().top-innerHeight*.22)-Math.abs(b.getBoundingClientRect().top-innerHeight*.22));
+        if(visible[0])setActiveNav(visible[0].id);
+      },{rootMargin:"-12% 0px -68% 0px",threshold:0});
+      for(const link of navLinks){const target=document.querySelector(link.getAttribute("href"));if(target)navObserver.observe(target)}
+    }
+    setActiveNav(location.hash.slice(1)||"overview");
     document.getElementById("refresh").addEventListener("click",refresh);document.getElementById("mihomo-check").addEventListener("click",checkMihomo);refresh();
   </script>
 </body>
