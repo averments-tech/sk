@@ -55,8 +55,14 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/zapret2-artifacts"
-          find "$SDK_DIR/bin/packages" -type f \( -name 'nfqws2_*.apk' -o -name 'mdig_*.apk' -o -name 'ip2net_*.apk' -o -name 'nfqws2_*.ipk' -o -name 'mdig_*.ipk' -o -name 'ip2net_*.ipk' \) -exec cp -v {} "$RUNNER_TEMP/zapret2-artifacts/" \;
-          test "$(find "$RUNNER_TEMP/zapret2-artifacts" -type f | wc -l)" -ge 3
+          find "$SDK_DIR/bin/packages" -type f \( -name 'nfqws2*.apk' -o -name 'mdig*.apk' -o -name 'ip2net*.apk' -o -name 'nfqws2*.ipk' -o -name 'mdig*.ipk' -o -name 'ip2net*.ipk' \) -exec cp -v {} "$RUNNER_TEMP/zapret2-artifacts/" \;
+          for package in nfqws2 mdig ip2net; do
+            if ! find "$RUNNER_TEMP/zapret2-artifacts" -maxdepth 1 -type f \( -name "$package*.apk" -o -name "$package*.ipk" \) | grep -q .; then
+              echo "Package artifact not found: $package"
+              find "$SDK_DIR/bin/packages" -type f -print | sort
+              exit 1
+            fi
+          done
           printf 'Zapret2 upstream: v1.0.5.2\nOpenWrt SDK: 25.12.5 mediatek/filogic\nRouter profile: Xiaomi AX3000T / aarch64_cortex-a53\nBuilt packages:\n' > "$RUNNER_TEMP/zapret2-artifacts/BUILD-INFO.txt"
           find "$RUNNER_TEMP/zapret2-artifacts" -maxdepth 1 -type f \( -name '*.apk' -o -name '*.ipk' \) -printf '%f\n' | sort >> "$RUNNER_TEMP/zapret2-artifacts/BUILD-INFO.txt"
           (cd "$RUNNER_TEMP/zapret2-artifacts" && sha256sum *.apk *.ipk > SHA256SUMS)
