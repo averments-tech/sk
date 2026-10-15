@@ -1,0 +1,38 @@
+#!/bin/sh
+# Validates a fixed local Mihomo config. It accepts no request parameters.
+
+if [ "${REQUEST_METHOD:-GET}" != GET ]; then
+    printf 'Status: 405 Method Not Allowed\r\n'
+    printf 'Content-Type: application/json; charset=utf-8\r\n\r\n'
+    printf '{"result":"method_not_allowed"}\n'
+    exit 0
+fi
+
+printf 'Content-Type: application/json; charset=utf-8\r\n'
+printf 'Cache-Control: no-store\r\n'
+printf 'X-Content-Type-Options: nosniff\r\n\r\n'
+
+if ! command -v mihomo >/dev/null 2>&1; then
+    printf '{"result":"no_binary"}\n'
+    exit 0
+fi
+
+CONFIG=
+for candidate in /etc/mihomo/config.yaml /etc/mihomo/config.yml /etc/mihomo.yaml; do
+    if [ -r "$candidate" ]; then
+        CONFIG=$candidate
+        break
+    fi
+done
+
+if [ -z "$CONFIG" ]; then
+    printf '{"result":"no_config"}\n'
+    exit 0
+fi
+
+# Do not forward Mihomo's raw output: it may contain subscription URLs or tokens.
+if mihomo -t -f "$CONFIG" >/dev/null 2>&1; then
+    printf '{"result":"valid"}\n'
+else
+    printf '{"result":"invalid"}\n'
+fi
