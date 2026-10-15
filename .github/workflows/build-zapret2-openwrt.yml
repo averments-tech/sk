@@ -65,7 +65,7 @@ jobs:
           done
           printf 'Zapret2 upstream: v1.0.5.2\nOpenWrt SDK: 25.12.5 mediatek/filogic\nRouter profile: Xiaomi AX3000T / aarch64_cortex-a53\nBuilt packages:\n' > "$RUNNER_TEMP/zapret2-artifacts/BUILD-INFO.txt"
           find "$RUNNER_TEMP/zapret2-artifacts" -maxdepth 1 -type f \( -name '*.apk' -o -name '*.ipk' \) -printf '%f\n' | sort >> "$RUNNER_TEMP/zapret2-artifacts/BUILD-INFO.txt"
-          (cd "$RUNNER_TEMP/zapret2-artifacts" && sha256sum *.apk *.ipk > SHA256SUMS)
+          (cd "$RUNNER_TEMP/zapret2-artifacts" && find . -maxdepth 1 -type f \( -name "*.apk" -o -name "*.ipk" \) -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS)
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
