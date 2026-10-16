@@ -72,7 +72,7 @@ class RouterCareTests(unittest.TestCase):
         self.assertIn("theme-color", self.html)
         self.assertIn("prefers-reduced-motion:reduce", self.html)
         self.assertNotRegex(self.html, r"https?://(?:fonts\.googleapis|cdnjs|cdn\.)")
-        self.assertIn("RouterCare 0.5.1", self.html)
+        self.assertIn("RouterCare 0.5.2", self.html)
 
     def test_parallel_dpi_services_raise_read_only_warning(self) -> None:
         self.assertIn('id="dpi-conflict"', self.html)
@@ -86,6 +86,11 @@ class RouterCareTests(unittest.TestCase):
             + "assert.equal(isDpiConflict({zapret:'stopped',zapret2:'running'}),false);" \
             + "assert.equal(isDpiConflict({zapret:'running',zapret2:'not_found'}),false);"
         subprocess.run(["node", "-e", harness], check=True)
+
+    def test_mihomo_syntax_test_is_not_presented_as_connectivity_check(self) -> None:
+        self.assertIn('id="mihomo-limit" role="note"', self.html)
+        self.assertIn("не проверяет соединение с VPN-узлами или доступ в интернет", self.html)
+        self.assertIn("синтаксис конфига корректен", self.html)
 
     def test_service_cards_stack_at_tablet_widths(self) -> None:
         tablet = re.search(r"@media\(max-width:720px\)\{(.*?)\}\s*@media\(max-width:490px\)",
