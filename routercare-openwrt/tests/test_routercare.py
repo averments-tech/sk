@@ -72,7 +72,7 @@ class OpenWrtZapretTests(unittest.TestCase):
         self.assertIn("theme-color", self.html)
         self.assertIn("prefers-reduced-motion:reduce", self.html)
         self.assertNotRegex(self.html, r"https?://(?:fonts\.googleapis|cdnjs|cdn\.)")
-        self.assertIn("OpenWrt Zapret 0.5.4", self.html)
+        self.assertIn("OpenWrt Zapret 0.5.5", self.html)
 
     def test_parallel_dpi_services_raise_read_only_warning(self) -> None:
         self.assertIn('id="dpi-conflict"', self.html)
@@ -91,6 +91,13 @@ class OpenWrtZapretTests(unittest.TestCase):
         self.assertIn('id="mihomo-limit" role="note"', self.html)
         self.assertIn("не проверяет соединение с VPN-узлами или доступ в интернет", self.html)
         self.assertIn("синтаксис конфига корректен", self.html)
+
+    def test_failed_status_request_marks_services_unknown(self) -> None:
+        self.assertIn('unknown:"Нет данных"', self.html)
+        catch = self.html.split("}catch(e){", 1)[1].split("}finally", 1)[0]
+        body = catch
+        for service_id in ("zapret-status", "zapret2", "mihomo-service"):
+            self.assertIn(f'setService("{service_id}","unknown")', body)
 
     def test_service_presence_is_not_claimed_as_traffic_success(self) -> None:
         self.assertIn("Статус службы/процесса; он не подтверждает прохождение трафика.", self.html)
