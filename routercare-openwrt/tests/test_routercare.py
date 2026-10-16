@@ -67,13 +67,13 @@ class OpenWrtZapretTests(unittest.TestCase):
         self.assertIn("без автообновления", self.html)
         self.assertIn("signal-grid", self.html)
         self.assertIn("skip-link", self.html)
-        self.assertIn('content="dark"', self.html)
-        self.assertIn("color-scheme:dark", self.html)
+        self.assertIn('content="light"', self.html)
+        self.assertIn("color-scheme:light", self.html)
         self.assertIn("theme-color", self.html)
         self.assertIn("prefers-reduced-motion:reduce", self.html)
         self.assertNotRegex(self.html, r"https?://(?:fonts\.googleapis|cdnjs|cdn\.)")
-        self.assertIn("OpenWrt Zapret 0.5.9", self.html)
-        self.assertIn("<b>0.5.9</b>", self.html)
+        self.assertIn("OpenWrt Zapret 0.5.10", self.html)
+        self.assertIn("<b>0.5.10</b>", self.html)
 
 
     def test_domain_list_validator_is_local_and_handles_duplicates_safely(self) -> None:
@@ -95,6 +95,22 @@ assert.equal(result.invalid.length,4);
 assert.equal(result.invalid[0].line,5);
 """
         subprocess.run(["node", "-e", harness], check=True)
+
+    def test_light_console_redesign_is_local_and_reduced_motion_safe(self) -> None:
+        self.assertIn('id="light-console-redesign"', self.html)
+        self.assertIn("--paper:#f4f7fb", self.html)
+        self.assertIn("Кобальт", self.html)
+        self.assertIn("Аметист", self.html)
+        self.assertIn("prefers-reduced-motion:reduce", self.html)
+        self.assertNotRegex(self.html, r"https?://(?:fonts\\.googleapis|cdnjs|cdn\\.)")
+
+    def test_light_console_redesign_is_local_and_reduced_motion_safe(self) -> None:
+        self.assertIn('id="light-console-redesign"', self.html)
+        self.assertIn("--paper:#f4f7fb", self.html)
+        self.assertIn("Кобальт", self.html)
+        self.assertIn("Аметист", self.html)
+        self.assertIn("prefers-reduced-motion:reduce", self.html)
+        self.assertIn('content="light"', self.html)
 
     def test_upstream_protocol_catalog_is_filterable_but_not_claimed_as_integrated(self) -> None:
         self.assertIn('id="protocols"', self.html)
