@@ -69,7 +69,7 @@ class RouterCareTests(unittest.TestCase):
         self.assertIn("skip-link", self.html)
         self.assertIn("color-scheme:light", self.html)
         self.assertNotRegex(self.html, r"https?://(?:fonts\.googleapis|cdnjs|cdn\.)")
-        self.assertIn("RouterCare 0.4.2", self.html)
+        self.assertIn("RouterCare 0.4.3", self.html)
 
     def test_service_cards_stack_at_tablet_widths(self) -> None:
         tablet = re.search(r"@media\(max-width:720px\)\{(.*?)\}\s*@media\(max-width:490px\)",
@@ -79,6 +79,12 @@ class RouterCareTests(unittest.TestCase):
         self.assertIn(".services{grid-template-columns:1fr}", rules)
         self.assertIn(".service-head{align-items:center;flex-direction:row}", rules)
         self.assertIn(".pill{margin-left:0}", rules)
+
+    def test_mobile_controls_have_comfortable_tap_targets(self) -> None:
+        self.assertRegex(self.html, r"@media\s*\(max-width:\s*720px\)[\s\S]*?\.nav a\s*\{\s*min-height:\s*44px")
+        self.assertRegex(self.html, r"\.icon-button\s*\{\s*width:\s*44px;\s*height:\s*44px")
+        self.assertRegex(self.html, r"\.button\s*\{\s*min-height:\s*44px")
+        self.assertRegex(self.html, r"@media\s*\(max-width:\s*490px\)[\s\S]*?\.topbar\s*\{\s*flex-wrap:\s*wrap")
 
     def test_inline_javascript_parses(self) -> None:
         scripts = re.findall(r"<script>(.*?)</script>", self.html, re.DOTALL)
