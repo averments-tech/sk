@@ -6,4 +6,4 @@ rm -f /www/cgi-bin/routercare-status
 rm -f /www/cgi-bin/routercare-mihomo-check
 rm -f /www/routercare/index.html
 rmdir /www/routercare 2>/dev/null || true
-printf 'Файлы RouterCare удалены. Резервные копии в /root/routercare-backup/ сохранены.\n'
+printf 'Файлы OpenWrt Zapret удалены. Резервные копии в /root/routercare-backup/ сохранены.\n'

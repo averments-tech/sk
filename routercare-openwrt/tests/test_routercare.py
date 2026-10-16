@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Small dependency-free regression checks for RouterCare's local UI and CGI."""
+"""Small dependency-free regression checks for OpenWrt Zapret's local UI and CGI."""
 
 from __future__ import annotations
 
@@ -44,7 +44,7 @@ def run_cgi(path: str, method: str) -> tuple[str, dict[str, object]]:
     return parts[0], json.loads(parts[1])
 
 
-class RouterCareTests(unittest.TestCase):
+class OpenWrtZapretTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.html = HTML.read_text(encoding="utf-8")
@@ -72,12 +72,12 @@ class RouterCareTests(unittest.TestCase):
         self.assertIn("theme-color", self.html)
         self.assertIn("prefers-reduced-motion:reduce", self.html)
         self.assertNotRegex(self.html, r"https?://(?:fonts\.googleapis|cdnjs|cdn\.)")
-        self.assertIn("RouterCare 0.5.3", self.html)
+        self.assertIn("OpenWrt Zapret 0.5.4", self.html)
 
     def test_parallel_dpi_services_raise_read_only_warning(self) -> None:
         self.assertIn('id="dpi-conflict"', self.html)
         self.assertIn('role="status" aria-live="polite" hidden', self.html)
-        self.assertIn("RouterCare не останавливает службы и не меняет конфигурацию", self.html)
+        self.assertIn("OpenWrt Zapret не останавливает службы и не меняет конфигурацию", self.html)
         match = re.search(r"function isDpiConflict\(services\)\{[^}]+\}", self.html)
         self.assertIsNotNone(match)
         function = match.group(0) if match else ""
