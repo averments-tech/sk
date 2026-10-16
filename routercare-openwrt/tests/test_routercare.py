@@ -73,6 +73,7 @@ class OpenWrtZapretTests(unittest.TestCase):
         self.assertIn("prefers-reduced-motion:reduce", self.html)
         self.assertNotRegex(self.html, r"https?://(?:fonts\.googleapis|cdnjs|cdn\.)")
         self.assertIn("OpenWrt Zapret 0.5.7", self.html)
+        self.assertIn("<b>0.5.7</b>", self.html)
 
     def test_parallel_dpi_services_raise_read_only_warning(self) -> None:
         self.assertIn('id="dpi-conflict"', self.html)
