@@ -72,7 +72,7 @@ class OpenWrtZapretTests(unittest.TestCase):
         self.assertIn("theme-color", self.html)
         self.assertIn("prefers-reduced-motion:reduce", self.html)
         self.assertNotRegex(self.html, r"https?://(?:fonts\.googleapis|cdnjs|cdn\.)")
-        self.assertIn("OpenWrt Zapret 0.5.5", self.html)
+        self.assertIn("OpenWrt Zapret 0.5.6", self.html)
 
     def test_parallel_dpi_services_raise_read_only_warning(self) -> None:
         self.assertIn('id="dpi-conflict"', self.html)
@@ -98,6 +98,25 @@ class OpenWrtZapretTests(unittest.TestCase):
         body = catch
         for service_id in ("zapret-status", "zapret2", "mihomo-service"):
             self.assertIn(f'setService("{service_id}","unknown")', body)
+
+    def test_accessible_platform_badges_and_local_accent_toggle(self) -> None:
+        self.assertIn('aria-label="Клиентские платформы: macOS и Linux через браузер"', self.html)
+        self.assertIn(">macOS</span>", self.html)
+        self.assertIn(">Linux</span>", self.html)
+        self.assertIn('id="theme-toggle"', self.html)
+        self.assertIn('aria-pressed="false"', self.html)
+        self.assertIn('localStorage.setItem("openwrt-zapret-accent"', self.html)
+        self.assertIn("themeToggle.addEventListener(\"click\"", self.html)
+
+    def test_flow_animation_tracks_local_api_state(self) -> None:
+        self.assertIn('class="flow-track"', self.html)
+        self.assertIn("@media(prefers-reduced-motion:no-preference){.hero.is-online .packet", self.html)
+        self.assertIn("@media(prefers-reduced-motion:reduce){.hero.is-online .packet{animation:none;opacity:.85}}", self.html)
+        match = re.search(r"function setConnectionState\(online\)\{[^}]+\}", self.html)
+        self.assertIsNotNone(match)
+        function = match.group(0) if match else ""
+        harness = function + "\nconst assert=require('node:assert/strict');let connected=false;let c={className:''};let h={classList:{toggle:(name,on)=>{connected=on}}};global.document={getElementById:()=>c,querySelector:()=>h};setConnectionState(true);assert.equal(c.className,'connection online');assert.equal(connected,true);setConnectionState(false);assert.equal(c.className,'connection offline');assert.equal(connected,false);"
+        subprocess.run(["node", "-e", harness], check=True)
 
     def test_service_presence_is_not_claimed_as_traffic_success(self) -> None:
         self.assertIn("Статус службы/процесса; он не подтверждает прохождение трафика.", self.html)
