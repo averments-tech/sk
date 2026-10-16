@@ -72,8 +72,29 @@ class OpenWrtZapretTests(unittest.TestCase):
         self.assertIn("theme-color", self.html)
         self.assertIn("prefers-reduced-motion:reduce", self.html)
         self.assertNotRegex(self.html, r"https?://(?:fonts\.googleapis|cdnjs|cdn\.)")
-        self.assertIn("OpenWrt Zapret 0.5.7", self.html)
-        self.assertIn("<b>0.5.7</b>", self.html)
+        self.assertIn("OpenWrt Zapret 0.5.8", self.html)
+        self.assertIn("<b>0.5.8</b>", self.html)
+
+
+    def test_domain_list_validator_is_local_and_handles_duplicates_safely(self) -> None:
+        self.assertIn('id="domain-input"', self.html)
+        self.assertIn('id="domain-result" role="status" aria-live="polite"', self.html)
+        self.assertIn("Список не сохраняется, не отправляется и не применяется к роутеру", self.html)
+        self.assertIn("не проверит доступность сайтов", self.html)
+        self.assertNotRegex(self.html, r"https?://(?:fonts\\.googleapis|cdnjs|cdn\\.)")
+        start = self.html.index("    function inspectDomainList(input){")
+        end = self.html.index("    function renderDomainCheck(result){", start)
+        function = self.html[start:end]
+        harness = function + """
+const assert=require('node:assert/strict');
+const result=inspectDomainList(' Example.COM \\n# note\\nexample.com\\nsub.example.org\\nhttps://bad.example\\n*.wild.example\\n127.0.0.1\\n-a.example');
+assert.deepEqual(result.valid,['example.com','sub.example.org']);
+assert.equal(result.duplicates.length,1);
+assert.equal(result.duplicates[0].line,3);
+assert.equal(result.invalid.length,4);
+assert.equal(result.invalid[0].line,5);
+"""
+        subprocess.run(["node", "-e", harness], check=True)
 
     def test_parallel_dpi_services_raise_read_only_warning(self) -> None:
         self.assertIn('id="dpi-conflict"', self.html)
