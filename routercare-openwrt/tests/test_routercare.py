@@ -69,7 +69,7 @@ class RouterCareTests(unittest.TestCase):
         self.assertIn("skip-link", self.html)
         self.assertIn("color-scheme:light", self.html)
         self.assertNotRegex(self.html, r"https?://(?:fonts\.googleapis|cdnjs|cdn\.)")
-        self.assertIn("RouterCare 0.4.3", self.html)
+        self.assertIn("RouterCare 0.4.4", self.html)
 
     def test_service_cards_stack_at_tablet_widths(self) -> None:
         tablet = re.search(r"@media\(max-width:720px\)\{(.*?)\}\s*@media\(max-width:490px\)",
@@ -95,8 +95,16 @@ class RouterCareTests(unittest.TestCase):
 
     def test_shell_scripts_parse(self) -> None:
         for path in ("install.sh", "uninstall.sh", "www/cgi-bin/routercare-status",
-                     "www/cgi-bin/routercare-mihomo-check"):
+                     "www/cgi-bin/routercare-mihomo-check", "../install.sh",
+                     "../uninstall.sh"):
             subprocess.run(["sh", "-n", str(ROOT / path)], check=True)
+
+    def test_repository_level_installers_delegate_to_current_package(self) -> None:
+        root = ROOT.parent
+        self.assertIn('exec "$ROOT_DIR/routercare-openwrt/install.sh" "$@"',
+                      (root / "install.sh").read_text(encoding="utf-8"))
+        self.assertIn('exec "$ROOT_DIR/routercare-openwrt/uninstall.sh" "$@"',
+                      (root / "uninstall.sh").read_text(encoding="utf-8"))
 
     def test_status_cgi_returns_well_formed_service_json(self) -> None:
         headers, body = run_cgi("www/cgi-bin/routercare-status", "GET")

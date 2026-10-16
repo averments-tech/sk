@@ -1,9 +1,5 @@
 #!/bin/sh
 set -eu
 
-[ "$(id -u)" = 0 ] || { printf 'Запустите от root.\n' >&2; exit 1; }
-rm -f /www/cgi-bin/routercare-status
-rm -f /www/cgi-bin/routercare-mihomo-check
-rm -f /www/routercare/index.html
-rmdir /www/routercare 2>/dev/null || true
-printf 'Файлы RouterCare удалены. Резервные копии в /root/routercare-backup/ сохранены.\n'
+ROOT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+exec "$ROOT_DIR/routercare-openwrt/uninstall.sh" "$@"
