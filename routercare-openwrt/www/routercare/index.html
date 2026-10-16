@@ -65,7 +65,10 @@
     :root[data-skin="violet"] .button:hover{background:linear-gradient(135deg,#806de0,#5559bd);border-color:#b6a8ff}
     :root[data-skin="violet"] .theme-toggle{border-color:#6254a7;background:linear-gradient(135deg,#262147,#161b2b);color:#e0d8ff}
     @media(max-width:720px){.theme-toggle{min-width:44px;min-height:44px}.platform-row{margin-top:12px}}
-  </style>
+  
+    .compat-section{margin-top:24px;scroll-margin-top:20px}.compat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.compat-card{min-width:0;padding:17px;border:1px solid #243e45;border-radius:15px;background:linear-gradient(145deg,#102127,#0e1b21);box-shadow:0 10px 28px #0003,inset 0 1px #ffffff08}.compat-top{display:flex;align-items:center;justify-content:space-between;gap:9px}.compat-icon{width:33px;height:33px;display:grid;place-items:center;border-radius:10px;background:#193a38;color:#83e4ce;font-size:10px;font-weight:900}.compat-icon.blue{background:#182e42;color:#7dbbff}.compat-icon.purple{background:#29233e;color:#c0aaff}.compat-icon.coral{background:#3b2925;color:#ff9b7b}.compat-state{padding:5px 8px;border:1px solid #29444a;border-radius:999px;background:#14282d;color:#b5c8c9;font-size:9px;font-weight:800}.compat-state.reference{border-color:#5c5133;background:#302a1b;color:#f3d58c}.compat-state.read-only{border-color:#2d536c;background:#172d3b;color:#95ccff}.compat-state.planned{border-color:#39464a;background:#182327;color:#a8b6b8}.compat-card h3{margin:14px 0 6px;font-size:14px;letter-spacing:-.02em}.compat-card p{margin:0;color:#a9bdc0;font-size:10px;line-height:1.6}.compat-card .compat-detail{margin-top:8px;color:#8fa5a8}.compat-link{display:inline-flex;align-items:center;margin-top:13px;color:#71e0d2;font-size:10px;font-weight:850;text-decoration:underline;text-decoration-color:#71e0d24d;text-underline-offset:3px}.compat-link:focus-visible{outline:3px solid #7df3e4;outline-offset:3px}.compat-note{margin:10px 1px 0;color:#96aaac;font-size:9px;line-height:1.5}
+    @media(max-width:720px){.compat-grid{grid-template-columns:1fr}.compat-section{scroll-margin-top:115px}}
+</style>
 </head>
 <body>
   <a class="skip-link" href="#overview">Перейти к содержимому</a>
@@ -79,6 +82,7 @@
       <nav class="nav">
         <a class="active" href="#overview" aria-current="location"><svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="3.5" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.7"/><rect x="13.5" y="3.5" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.7"/><rect x="3.5" y="13.5" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.7"/><rect x="13.5" y="13.5" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.7"/></svg>Обзор</a>
         <a href="#zapret-service"><svg viewBox="0 0 24 24" fill="none"><path d="M13.2 2.8 5.5 13h5.8l-.6 8.2L18.5 11h-5.8l.5-8.2Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>Zapret / DPI</a>
+        <a href="#compatibility"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6.5h16M4 12h16M4 17.5h16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="8" cy="6.5" r="1.2" fill="currentColor"/><circle cx="15" cy="12" r="1.2" fill="currentColor"/><circle cx="10" cy="17.5" r="1.2" fill="currentColor"/></svg>Совместимость</a>
         <a href="#mihomo"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h10m0 0-3-3m3 3-3 3M20 17H10m0 0 3-3m-3 3 3 3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="18" cy="7" r="2" stroke="currentColor" stroke-width="1.7"/><circle cx="6" cy="17" r="2" stroke="currentColor" stroke-width="1.7"/></svg>Mihomo</a>
         <a href="#system"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.7"/><path d="M8 8h8v8H8zM9 1.8v2.5m6-2.5v2.5M9 19.7v2.5m6-2.5v2.5M1.8 9h2.5m-2.5 6h2.5m15.4-6h2.5m-2.5 6h2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Система</a>
       </nav>
@@ -110,6 +114,40 @@
         </div>
         <div class="notice warning" id="dpi-conflict" role="status" aria-live="polite" hidden>Одновременно работают Zapret и Zapret2. Проверьте, нужны ли оба перехватчика: их совместная работа может конфликтовать. OpenWrt Zapret не останавливает службы и не меняет конфигурацию.</div>
       </section>
+      <section class="compat-section" id="compatibility" aria-labelledby="compatibility-title">
+        <div class="section-head"><div><h2 id="compatibility-title">Карта интеграции</h2><p>Сверка модулей Zapret Manager с тем, что реально подключено в OpenWrt Zapret.</p></div><span class="section-label">4 направления</span></div>
+        <div class="compat-grid">
+          <article class="compat-card">
+            <div class="compat-top"><span class="compat-icon">01</span><span class="compat-state reference">Источник</span></div>
+            <h3>Zapret v1 · стратегии</h3>
+            <p>Upstream публикует профили v1–v10 и отдельные варианты для YouTube, игр и Discord. Это параметры nfqws первой ветки.</p>
+            <p class="compat-detail">В нашей панели — только ссылка на первоисточник. Импорт и применение не выполняются; настройки v1 не переносятся в Zapret2.</p>
+            <a class="compat-link" href="https://github.com/StressOzz/Zapret-Manager/blob/main/Strategies.md" target="_blank" rel="noopener noreferrer">Открыть стратегии StressOzz ↗</a>
+          </article>
+          <article class="compat-card">
+            <div class="compat-top"><span class="compat-icon blue">02</span><span class="compat-state read-only">Статус</span></div>
+            <h3>Zapret2 · основной путь</h3>
+            <p>Сейчас панель только показывает наличие службы и предупреждает о возможном конфликте с legacy Zapret v1.</p>
+            <p class="compat-detail">Выбор, тестирование и применение профилей Zapret2 пока не подключены.</p>
+            <a class="compat-link" href="https://github.com/bol-van/zapret2" target="_blank" rel="noopener noreferrer">Официальный upstream Zapret2 ↗</a>
+          </article>
+          <article class="compat-card">
+            <div class="compat-top"><span class="compat-icon purple">03</span><span class="compat-state planned">Не интегрировано</span></div>
+            <h3>Hosts · DNS · списки</h3>
+            <p>В менеджере upstream есть разделы хост-листов, исключений, DoH и блокировки рекламы.</p>
+            <p class="compat-detail">Здесь редактор, загрузка и проверка списков ещё не реализованы. Категории и домены не выдаются за проверенные данные.</p>
+            <a class="compat-link" href="https://github.com/StressOzz/Zapret-Manager" target="_blank" rel="noopener noreferrer">Состав модулей upstream ↗</a>
+          </article>
+          <article class="compat-card">
+            <div class="compat-top"><span class="compat-icon coral">04</span><span class="compat-state planned">Не интегрировано</span></div>
+            <h3>VPN · прокси · помощники</h3>
+            <p>В этой версии доступна только локальная проверка синтаксиса Mihomo YAML. Она не проверяет соединение с узлами или прохождение трафика.</p>
+            <p class="compat-detail">Импорт подписок, WARP, Steer, Forkozz, AmneziaWG, ByeTube и другие модули не подключены и не переключаются.</p>
+            <a class="compat-link" href="https://github.com/StressOzz/Zapret-Manager" target="_blank" rel="noopener noreferrer">Документация Zapret Manager ↗</a>
+          </article>
+        </div>
+        <p class="compat-note">Справочная карта не меняет настройки роутера. Upstream-проект и его авторство остаются у StressOzz; код и списки из него в OpenWrt Zapret не копируются.</p>
+      </section>
       <div class="lower-grid">
         <section class="panel" id="mihomo" aria-labelledby="mihomo-title">
           <div class="panel-head"><span class="service-icon purple"><svg viewBox="0 0 24 24" fill="none"><path d="M8 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9l-5-5h-2" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 4v5h5M8 13h8m-8 4h6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span><div><h3 id="mihomo-title">Проверка Mihomo</h3><p>Только проверка синтаксиса локального YAML</p></div></div>
@@ -121,7 +159,7 @@
         </section>
       </div>
       <div class="notice" id="message">Локальная панель не отправляет данные на сторонние серверы. Сейчас доступны просмотр состояния и проверка Mihomo-конфига.</div>
-      <footer class="footer"><span><strong>OpenWrt Zapret 0.5.6</strong> · локальная диагностика</span><span>Для домашней сети · не публикуйте панель в интернет</span></footer>
+      <footer class="footer"><span><strong>OpenWrt Zapret 0.5.7</strong> · локальная диагностика</span><span>Для домашней сети · не публикуйте панель в интернет</span></footer>
     </main>
   </div>
   <script>

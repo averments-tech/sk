@@ -72,7 +72,7 @@ class OpenWrtZapretTests(unittest.TestCase):
         self.assertIn("theme-color", self.html)
         self.assertIn("prefers-reduced-motion:reduce", self.html)
         self.assertNotRegex(self.html, r"https?://(?:fonts\.googleapis|cdnjs|cdn\.)")
-        self.assertIn("OpenWrt Zapret 0.5.6", self.html)
+        self.assertIn("OpenWrt Zapret 0.5.7", self.html)
 
     def test_parallel_dpi_services_raise_read_only_warning(self) -> None:
         self.assertIn('id="dpi-conflict"', self.html)
@@ -170,6 +170,17 @@ class OpenWrtZapretTests(unittest.TestCase):
         headers, body = run_cgi("www/cgi-bin/routercare-mihomo-check", "POST")
         self.assertIn("405 Method Not Allowed", headers)
         self.assertEqual(body, {"result": "method_not_allowed"})
+
+    def test_upstream_compatibility_map_is_read_only_and_linked(self) -> None:
+        self.assertIn('id="compatibility"', self.html)
+        self.assertIn('href="#compatibility"', self.html)
+        self.assertIn("https://github.com/StressOzz/Zapret-Manager/blob/main/Strategies.md", self.html)
+        self.assertIn("https://github.com/bol-van/zapret2", self.html)
+        self.assertIn("Импорт и применение не выполняются", self.html)
+        self.assertIn("настройки v1 не переносятся в Zapret2", self.html)
+        self.assertIn("Импорт подписок, WARP, Steer, Forkozz, AmneziaWG", self.html)
+        self.assertIn("код и списки из него в OpenWrt Zapret не копируются", self.html)
+        self.assertIn(".compat-grid{grid-template-columns:1fr}", self.html)
 
 
 if __name__ == "__main__":
