@@ -15,6 +15,10 @@
   
 .domain-check{margin-top:14px}.domain-intro{max-width:780px;margin:0 0 14px;color:#84959a;font-size:11px;line-height:1.6}.domain-label{display:block;margin:0 0 6px;color:#d5e1e3;font-size:10px;font-weight:750}.domain-input{display:block;width:100%;min-height:128px;padding:12px;border:1px solid #334b50;border-radius:10px;background:#0a1519;color:#e7f1f0;font:12px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;resize:vertical}.domain-input::placeholder{color:#74888b}.domain-input:focus-visible,.domain-actions button:focus-visible{outline:3px solid #57c5b3;outline-offset:2px}.domain-actions{display:flex;gap:8px;margin-top:10px}.domain-actions .button{width:auto;min-height:40px;padding:0 14px}.domain-actions .button.secondary{border-color:#394a4e;background:#17252a;box-shadow:none;color:#d2dfe0}.domain-result{margin-top:12px;padding:11px 12px;border:1px solid #29434a;border-radius:9px;background:#0b191e;color:#a8bec1;font:11px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere}.domain-result:empty{display:none}
 @media(max-width:600px){.domain-actions{align-items:stretch}.domain-actions .button{flex:1;justify-content:center;padding:0 8px}.domain-input{min-height:150px;font-size:16px}}
+
+.protocol-section{margin-top:14px;scroll-margin-top:20px}.protocol-intro{margin:0 0 12px;color:#91a8ab;font-size:10px;line-height:1.6;max-width:920px}.protocol-filters{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 12px}.protocol-filter{min-height:38px;padding:0 13px;border:1px solid #29444a;border-radius:9px;background:#102127;color:#afc3c6;font-size:10px;font-weight:800;cursor:pointer;transition:background .18s,border-color .18s,color .18s}.protocol-filter:hover{border-color:#4aa79b;color:#e4f7f2}.protocol-filter.active{border-color:#42c6b2;background:#153a3a;color:#e4fff8;box-shadow:inset 0 0 0 1px #42c6b240}.protocol-filter:focus-visible{outline:3px solid #7de1ce;outline-offset:2px}.protocol-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.protocol-card{min-width:0;padding:13px;border:1px solid #243e45;border-radius:13px;background:linear-gradient(145deg,#102127,#0d1b21)}.protocol-card[hidden]{display:none}.protocol-card-head{display:flex;align-items:center;justify-content:space-between;gap:8px}.protocol-mark{width:32px;height:32px;display:grid;place-items:center;border-radius:10px;background:#193a38;color:#83e4ce;font-size:9px;font-weight:900}.protocol-mark.blue{background:#1c3355;color:#8bb8ff}.protocol-mark.coral{background:#4a2930;color:#ff9d91}.protocol-mark.amber{background:#4a3923;color:#f5c57b}.protocol-mark.purple{background:#382e50;color:#c5aaff}.protocol-mark.green{background:#214232;color:#99e2b4}.protocol-card h4{margin:9px 0 3px;color:#e3eff0;font-size:13px}.protocol-tags{margin:0;color:#b5d6d6;font-size:10px;font-weight:750}.protocol-note{min-height:30px;margin:6px 0 0;color:#91a8ab;font-size:9px;line-height:1.5}.protocol-card .compat-link{margin-top:7px}.protocol-caution{margin:11px 1px 0;color:#91a8ab;font-size:9px;line-height:1.55}.protocol-result{margin:8px 2px 0;color:#9bcac3;font-size:9px}.protocol-filters button:disabled{cursor:default}
+@media(max-width:700px){.protocol-grid{grid-template-columns:1fr}.protocol-filter{min-height:44px;flex:1}}
+@media(prefers-reduced-motion:reduce){.protocol-filter{transition:none}}
 </style>
   <style>
     @media (max-width: 720px) {
@@ -87,12 +91,13 @@
         <a href="#zapret-service"><svg viewBox="0 0 24 24" fill="none"><path d="M13.2 2.8 5.5 13h5.8l-.6 8.2L18.5 11h-5.8l.5-8.2Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>Zapret / DPI</a>
         <a href="#compatibility"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6.5h16M4 12h16M4 17.5h16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="8" cy="6.5" r="1.2" fill="currentColor"/><circle cx="15" cy="12" r="1.2" fill="currentColor"/><circle cx="10" cy="17.5" r="1.2" fill="currentColor"/></svg>Совместимость</a>
         <a href="#list-check"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6h11M9 12h11M9 18h11" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="m3.5 6 .9.9L6 5m-2.5 7 .9.9L6 11m-2.5 7 .9.9L6 17" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Списки</a>
+        <a href="#protocols"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.7"/><path d="M3.8 12h16.4M12 3.5c2.2 2.3 3.3 5.1 3.3 8.5s-1.1 6.2-3.3 8.5c-2.2-2.3-3.3-5.1-3.3-8.5s1.1-6.2 3.3-8.5Z" stroke="currentColor" stroke-width="1.5"/></svg>VPN-протоколы</a>
         <a href="#mihomo"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h10m0 0-3-3m3 3-3 3M20 17H10m0 0 3-3m-3 3 3 3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="18" cy="7" r="2" stroke="currentColor" stroke-width="1.7"/><circle cx="6" cy="17" r="2" stroke="currentColor" stroke-width="1.7"/></svg>Mihomo</a>
         <a href="#system"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.7"/><path d="M8 8h8v8H8zM9 1.8v2.5m6-2.5v2.5M9 19.7v2.5m6-2.5v2.5M1.8 9h2.5m-2.5 6h2.5m15.4-6h2.5m-2.5 6h2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Система</a>
       </nav>
       <div class="side-spacer"></div>
       <div class="local-card"><div class="local-top"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v5c0 4.6 2.9 8.3 7 10 4.1-1.7 7-5.4 7-10V6l-7-3Z" stroke="currentColor" stroke-width="1.7"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Локальная диагностика</div><p>Данные остаются на роутере. Внешняя аналитика отключена.</p></div>
-      <div class="side-version"><span>OpenWrt Zapret</span><b>0.5.8</b></div>
+      <div class="side-version"><span>OpenWrt Zapret</span><b>0.5.9</b></div>
     </aside>
     <main class="main" id="overview">
       <header class="topbar">
@@ -161,6 +166,49 @@
         <p class="diagnostic-hint">Проверяются только ASCII-домены (IDN — в punycode). URL, IP-адреса, маски и CIDR не принимаются. Список не сохраняется, не отправляется и не применяется к роутеру.</p>
         <div class="domain-result" id="domain-result" role="status" aria-live="polite" aria-atomic="true">Результат проверки появится здесь.</div>
       </section>
+      <section class="panel protocol-section" id="protocols" aria-labelledby="protocols-title">
+        <div class="panel-head"><span class="service-icon purple"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.7"/><path d="M3.8 12h16.4M12 3.5c2.2 2.3 3.3 5.1 3.3 8.5s-1.1 6.2-3.3 8.5c-2.2-2.3-3.3-5.1-3.3-8.5s1.1-6.2 3.3-8.5Z" stroke="currentColor" stroke-width="1.5"/></svg></span><div><h3 id="protocols-title">VPN-протоколы Mihomo</h3><p>Справочник по документации upstream · версия на роутере не подтверждена</p></div></div>
+        <p class="protocol-intro">Фильтруйте типы узлов по сетевому транспорту. Метка «в upstream» означает, что тип описан в официальных документах Mihomo; это не означает, что OpenWrt Zapret уже умеет импортировать подписку, подключать узел или проверять его скорость.</p>
+        <div class="protocol-filters" role="group" aria-label="Фильтр протоколов по транспорту">
+          <button class="protocol-filter active" type="button" data-protocol-filter="all" aria-pressed="true">Все</button>
+          <button class="protocol-filter" type="button" data-protocol-filter="tcp" aria-pressed="false">TCP / TLS</button>
+          <button class="protocol-filter" type="button" data-protocol-filter="udp" aria-pressed="false">UDP / QUIC</button>
+        </div>
+        <div class="protocol-grid" id="protocol-grid">
+          <article class="protocol-card" data-protocol-card data-transports="tcp">
+            <div class="protocol-card-head"><span class="protocol-mark ">VL</span><span class="compat-state planned">Не интегрировано</span></div><h4>VLESS</h4><p class="protocol-tags">TCP · TLS / Reality · WS · gRPC · XHTTP</p><p class="protocol-note">Транспорт и параметры защиты задаются отдельно.</p><a class="compat-link" href="https://wiki.metacubex.one/en/config/proxies/vless/" target="_blank" rel="noopener noreferrer">Документация Mihomo ↗</a>
+          </article>
+          <article class="protocol-card" data-protocol-card data-transports="tcp udp">
+            <div class="protocol-card-head"><span class="protocol-mark blue">VM</span><span class="compat-state planned">Не интегрировано</span></div><h4>VMess</h4><p class="protocol-tags">TCP · TLS · UDP-пакеты</p><p class="protocol-note">Параметр UDP зависит от конфига узла.</p><a class="compat-link" href="https://wiki.metacubex.one/en/config/proxies/vmess/" target="_blank" rel="noopener noreferrer">Документация Mihomo ↗</a>
+          </article>
+          <article class="protocol-card" data-protocol-card data-transports="tcp udp">
+            <div class="protocol-card-head"><span class="protocol-mark coral">TR</span><span class="compat-state planned">Не интегрировано</span></div><h4>Trojan</h4><p class="protocol-tags">TCP · TLS · WS / gRPC · UDP</p><p class="protocol-note">Набор транспортов зависит от настроек сервера.</p><a class="compat-link" href="https://wiki.metacubex.one/en/config/proxies/trojan/" target="_blank" rel="noopener noreferrer">Документация Mihomo ↗</a>
+          </article>
+          <article class="protocol-card" data-protocol-card data-transports="udp">
+            <div class="protocol-card-head"><span class="protocol-mark amber">H2</span><span class="compat-state planned">Не интегрировано</span></div><h4>Hysteria2</h4><p class="protocol-tags">QUIC · UDP · TLS</p><p class="protocol-note">Требуется UDP-путь; TCP-узлом не является.</p><a class="compat-link" href="https://wiki.metacubex.one/en/config/proxies/hysteria2/" target="_blank" rel="noopener noreferrer">Документация Mihomo ↗</a>
+          </article>
+          <article class="protocol-card" data-protocol-card data-transports="udp">
+            <div class="protocol-card-head"><span class="protocol-mark blue">TU</span><span class="compat-state planned">Не интегрировано</span></div><h4>TUIC</h4><p class="protocol-tags">QUIC · UDP</p><p class="protocol-note">Сверяйте версию и параметры узла с текущей документацией.</p><a class="compat-link" href="https://wiki.metacubex.one/en/config/proxies/tuic/" target="_blank" rel="noopener noreferrer">Документация Mihomo ↗</a>
+          </article>
+          <article class="protocol-card" data-protocol-card data-transports="udp">
+            <div class="protocol-card-head"><span class="protocol-mark purple">WG</span><span class="compat-state planned">Не интегрировано</span></div><h4>WireGuard</h4><p class="protocol-tags">UDP · peer-конфигурация</p><p class="protocol-note">Импорт ключей и настройка туннеля не реализованы.</p><a class="compat-link" href="https://wiki.metacubex.one/en/config/proxies/wg/" target="_blank" rel="noopener noreferrer">Документация Mihomo ↗</a>
+          </article>
+          <article class="protocol-card" data-protocol-card data-transports="tcp udp">
+            <div class="protocol-card-head"><span class="protocol-mark green">SS</span><span class="compat-state planned">Не интегрировано</span></div><h4>Shadowsocks</h4><p class="protocol-tags">TCP · UDP</p><p class="protocol-note">Метод шифрования и параметры узла должны совпадать.</p><a class="compat-link" href="https://wiki.metacubex.one/en/config/proxies/shadowsocks/" target="_blank" rel="noopener noreferrer">Документация Mihomo ↗</a>
+          </article>
+          <article class="protocol-card" data-protocol-card data-transports="tcp">
+            <div class="protocol-card-head"><span class="protocol-mark coral">AT</span><span class="compat-state planned">Не интегрировано</span></div><h4>AnyTLS</h4><p class="protocol-tags">TCP · TLS</p><p class="protocol-note">Mihomo не поддерживает сочетание AnyTLS + Reality.</p><a class="compat-link" href="https://wiki.metacubex.one/en/config/proxies/anytls/" target="_blank" rel="noopener noreferrer">Документация Mihomo ↗</a>
+          </article>
+          <article class="protocol-card" data-protocol-card data-transports="tcp">
+            <div class="protocol-card-head"><span class="protocol-mark ">HT</span><span class="compat-state planned">Не интегрировано</span></div><h4>HTTP / HTTPS</h4><p class="protocol-tags">TCP · TLS</p><p class="protocol-note">Обычный прокси-протокол без проверки узла в этой панели.</p><a class="compat-link" href="https://wiki.metacubex.one/en/config/proxies/http/" target="_blank" rel="noopener noreferrer">Документация Mihomo ↗</a>
+          </article>
+          <article class="protocol-card" data-protocol-card data-transports="tcp udp">
+            <div class="protocol-card-head"><span class="protocol-mark blue">SO</span><span class="compat-state planned">Не интегрировано</span></div><h4>SOCKS</h4><p class="protocol-tags">TCP · UDP (если поддерживает сервер)</p><p class="protocol-note">Ни адреса, ни учётные данные узлов сюда не добавлены.</p><a class="compat-link" href="https://wiki.metacubex.one/en/config/proxies/socks/" target="_blank" rel="noopener noreferrer">Документация Mihomo ↗</a>
+          </article>
+        </div>
+        <p class="protocol-result" id="protocol-result" role="status" aria-live="polite" aria-atomic="true">Показано 10 типов из upstream-справочника. Импорт и соединение не выполняются.</p>
+        <p class="protocol-caution">Даже если тип есть в upstream Mihomo, конкретная сборка, версия на роутере, параметры провайдера и нужный транспорт должны быть совместимы. Проверка mihomo -t читает установленный конфиг, но не проверяет доступность узлов.</p>
+      </section>
       <div class="lower-grid">
         <section class="panel" id="mihomo" aria-labelledby="mihomo-title">
           <div class="panel-head"><span class="service-icon purple"><svg viewBox="0 0 24 24" fill="none"><path d="M8 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9l-5-5h-2" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 4v5h5M8 13h8m-8 4h6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span><div><h3 id="mihomo-title">Проверка Mihomo</h3><p>Только проверка синтаксиса локального YAML</p></div></div>
@@ -172,7 +220,7 @@
         </section>
       </div>
       <div class="notice" id="message">Локальная панель не отправляет данные на сторонние серверы. Сейчас доступны просмотр состояния и проверка Mihomo-конфига.</div>
-      <footer class="footer"><span><strong>OpenWrt Zapret 0.5.8</strong> · локальная диагностика</span><span>Для домашней сети · не публикуйте панель в интернет</span></footer>
+      <footer class="footer"><span><strong>OpenWrt Zapret 0.5.9</strong> · локальная диагностика</span><span>Для домашней сети · не публикуйте панель в интернет</span></footer>
     </main>
   </div>
   <script>
@@ -233,6 +281,15 @@
       if(result.invalid.length>50)rows.push(`… ещё ${result.invalid.length-50}`);
       target.textContent=rows.join("\n")
     }
+    function protocolMatches(filter,transports){
+      return filter==="all"||String(transports).split(/\s+/).includes(filter)
+    }
+    function filterProtocolCards(filter){
+      let visible=0;const cards=document.querySelectorAll("[data-protocol-card]");
+      for(const card of cards){const match=protocolMatches(filter,card.dataset.transports||"");card.hidden=!match;if(match)visible++}
+      for(const button of document.querySelectorAll("[data-protocol-filter]")){const active=button.dataset.protocolFilter===filter;button.classList.toggle("active",active);button.setAttribute("aria-pressed",String(active))}
+      document.getElementById("protocol-result").textContent="Показано "+visible+" типов. Импорт и соединение не выполняются."
+    }
     const navLinks=[...document.querySelectorAll('.nav a[href^="#"]')];
     function setActiveNav(id){for(const link of navLinks){const active=link.getAttribute("href")==="#"+id;link.classList.toggle("active",active);if(active)link.setAttribute("aria-current","location");else link.removeAttribute("aria-current")}}
     for(const link of navLinks)link.addEventListener("click",()=>setActiveNav(link.getAttribute("href").slice(1)));
@@ -251,6 +308,7 @@
     const domainInput=document.getElementById("domain-input"),domainResult=document.getElementById("domain-result");
     document.getElementById("domain-check-button").addEventListener("click",()=>renderDomainCheck(inspectDomainList(domainInput.value)));
     document.getElementById("domain-clear-button").addEventListener("click",()=>{domainInput.value="";domainResult.textContent="Список очищен. Данные не сохранялись."});
+    for(const filterButton of document.querySelectorAll("[data-protocol-filter]"))filterButton.addEventListener("click",()=>filterProtocolCards(filterButton.dataset.protocolFilter));
     document.getElementById("refresh").addEventListener("click",refresh);document.getElementById("mihomo-check").addEventListener("click",checkMihomo);refresh();
   </script>
 </body>

@@ -6,11 +6,12 @@
 
 OpenWrt Zapret — собственная диагностическая панель для OpenWrt. Внешние движки остаются отдельными upstream-проектами; их код, данные и товарные знаки не выдаются за наши. Панель по умолчанию работает read-only и не меняет firewall, DNS, hosts, службы или VPN.
 
-## Что доступно в версии 0.5.8
+## Что доступно в версии 0.5.9
 
 - **Состояние Zapret v1, Zapret2 и Mihomo:** только наличие/статус службы по локальному read-only CGI. Совместное состояние Zapret и Zapret2 вызывает предупреждение, не автоматическое переключение.
 - **Mihomo:** отдельная локальная проверка синтаксиса фиксированного YAML командой mihomo -t; конфигурация и вывод с секретами не показываются. Это не тест соединения/скорости.
 - **Список доменов:** браузерная проверка формата ASCII-доменов, дубликатов и пустых/комментариев строк. Не выполняет DNS/HTTP-проверку; введённое значение не сохраняется и не передаётся.
+- **Mihomo, типы прокси:** справочник VLESS, VMess, Trojan, Hysteria2, TUIC, WireGuard, Shadowsocks, AnyTLS, HTTP и SOCKS по официальным страницам конфигурации. Фильтр меняет только видимость карточек; фактическая поддержка конкретной сборкой роутера и импорт не проверены.
 - **Стратегии StressOzz:** в панели есть ссылка на upstream-каталог. Опции nfqws ветки Zapret v1 не загружаются и не применяются к Zapret2.
 
 ## Компоненты, которые ещё не интегрированы
@@ -49,3 +50,21 @@ Zapret-Manager документирует дополнительные моду�
 ## Визуальная сверка
 
 16 октября 2026 года просмотрены изображения пользовательских экранов Zapret Manager и открытые примеры панелей доменов KIT.domains и OSTA Domains Dashboard (Dribbble; обзорный список и понятное расположение сводки/действий). Использована только общая идея компактного итога проверки и отдельной кнопки очистки; макеты, тексты, логотипы, изображения и списки данных не копировались. Источники: [KIT.domains dashboard](https://kit.domains/blog/how-kit-domains-helps-indie-hackers-earn-more/) и [OSTA Domains Dashboard](https://dribbble.com/shots/25508260-OSTA-Domains-Dashboard).
+
+
+## Проверка протоколов и визуальные референсы
+
+На 16 октября 2026 года сверены официальные страницы Mihomo для типов прокси и полей транспорта. Панель ссылается на первоисточники и помечает типы как не интегрированные; список не содержит серверов, адресов, UUID, ключей или подписочных URL.
+
+Для общей UX-идеи фильтрации и компактных протокольных меток просмотрено изображение «VPN App Country List Filters» Refraction Studio на Dribbble (найдено поиском изображений 16 октября 2026 года; дата публикации источника не указана). Перенесён только общий приём фильтрации; макет, изображения, логотипы и серверные данные не копировались.
+
+- [Mihomo: VLESS](https://wiki.metacubex.one/en/config/proxies/vless/)
+- [Mihomo: VMess](https://wiki.metacubex.one/en/config/proxies/vmess/)
+- [Mihomo: Trojan](https://wiki.metacubex.one/en/config/proxies/trojan/)
+- [Mihomo: Hysteria2](https://wiki.metacubex.one/en/config/proxies/hysteria2/)
+- [Mihomo: TUIC](https://wiki.metacubex.one/en/config/proxies/tuic/)
+- [Mihomo: WireGuard](https://wiki.metacubex.one/en/config/proxies/wg/)
+- [Mihomo: Shadowsocks](https://wiki.metacubex.one/en/config/proxies/shadowsocks/)
+- [Mihomo: AnyTLS](https://wiki.metacubex.one/en/config/proxies/anytls/)
+- [Mihomo: HTTP](https://wiki.metacubex.one/en/config/proxies/http/)
+- [Mihomo: SOCKS](https://wiki.metacubex.one/en/config/proxies/socks/)

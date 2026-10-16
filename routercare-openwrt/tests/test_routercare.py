@@ -72,8 +72,8 @@ class OpenWrtZapretTests(unittest.TestCase):
         self.assertIn("theme-color", self.html)
         self.assertIn("prefers-reduced-motion:reduce", self.html)
         self.assertNotRegex(self.html, r"https?://(?:fonts\.googleapis|cdnjs|cdn\.)")
-        self.assertIn("OpenWrt Zapret 0.5.8", self.html)
-        self.assertIn("<b>0.5.8</b>", self.html)
+        self.assertIn("OpenWrt Zapret 0.5.9", self.html)
+        self.assertIn("<b>0.5.9</b>", self.html)
 
 
     def test_domain_list_validator_is_local_and_handles_duplicates_safely(self) -> None:
@@ -93,6 +93,27 @@ assert.equal(result.duplicates.length,1);
 assert.equal(result.duplicates[0].line,3);
 assert.equal(result.invalid.length,4);
 assert.equal(result.invalid[0].line,5);
+"""
+        subprocess.run(["node", "-e", harness], check=True)
+
+    def test_upstream_protocol_catalog_is_filterable_but_not_claimed_as_integrated(self) -> None:
+        self.assertIn('id="protocols"', self.html)
+        self.assertIn('id="protocol-result" role="status" aria-live="polite"', self.html)
+        self.assertIn("версия на роутере не подтверждена", self.html)
+        self.assertIn("Не интегрировано", self.html)
+        self.assertEqual(self.html.count('data-protocol-card data-transports='), 10)
+        for source in ("vless", "vmess", "trojan", "hysteria2", "tuic", "wg", "shadowsocks", "anytls", "http", "socks"):
+            self.assertIn(f"https://wiki.metacubex.one/en/config/proxies/{source}/", self.html)
+        start = self.html.index("    function protocolMatches(filter,transports){")
+        end = self.html.index("    function filterProtocolCards(filter){", start)
+        function = self.html[start:end]
+        harness = function + """
+const assert=require('node:assert/strict');
+assert.equal(protocolMatches('all','tcp udp'),true);
+assert.equal(protocolMatches('tcp','tcp udp'),true);
+assert.equal(protocolMatches('udp','tcp udp'),true);
+assert.equal(protocolMatches('udp','tcp'),false);
+assert.equal(protocolMatches('tcp','udp'),false);
 """
         subprocess.run(["node", "-e", harness], check=True)
 
