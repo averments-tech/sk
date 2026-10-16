@@ -67,9 +67,12 @@ class RouterCareTests(unittest.TestCase):
         self.assertIn("без автообновления", self.html)
         self.assertIn("signal-grid", self.html)
         self.assertIn("skip-link", self.html)
-        self.assertIn("color-scheme:light", self.html)
+        self.assertIn('content="dark"', self.html)
+        self.assertIn("color-scheme:dark", self.html)
+        self.assertIn("theme-color", self.html)
+        self.assertIn("prefers-reduced-motion:reduce", self.html)
         self.assertNotRegex(self.html, r"https?://(?:fonts\.googleapis|cdnjs|cdn\.)")
-        self.assertIn("RouterCare 0.4.4", self.html)
+        self.assertIn("RouterCare 0.5.0", self.html)
 
     def test_service_cards_stack_at_tablet_widths(self) -> None:
         tablet = re.search(r"@media\(max-width:720px\)\{(.*?)\}\s*@media\(max-width:490px\)",
