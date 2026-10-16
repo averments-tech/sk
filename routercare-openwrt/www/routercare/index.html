@@ -40,8 +40,9 @@
     .service-card,.panel{border-color:#243e45;background:linear-gradient(145deg,#102127,#0e1b21);box-shadow:0 10px 28px #0003,inset 0 1px #ffffff08}.service-card:hover{border-color:#3b7778;box-shadow:0 16px 34px #0005,0 0 0 1px #58ddd512}.service-icon{background:#342924;border-color:#593b32;color:#ff9b7b}.service-icon.blue{background:#182e42;border-color:#2b4965;color:#7dbbff}.service-icon.purple{background:#29233e;border-color:#493d6b;color:#c0aaff}.service-title span,.service-desc,.panel-head p,.system-item span{color:#9eb4b8}.service-foot{border-color:#294148}.service-foot span:last-child{color:#8ea7aa}
     .pill{background:#17282c;color:#d4e5e4}.pill.running{background:#12362d;color:#82e7b8}.pill.running .dot{background:#54dda0;box-shadow:0 0 0 3px #54dda022}.pill.stopped{background:#392626;color:#ff9a9f}.pill.not_found{background:#282a2c;color:#d6bc91}
     .check-copy span{color:#9cb2b6}.button{border-color:#39a8a0;background:linear-gradient(135deg,#1e8f89,#176b73);color:#efffff;box-shadow:0 8px 20px #168b7d30}.button:hover{background:linear-gradient(135deg,#27aaa0,#1b7b82);border-color:#66e5d7;box-shadow:0 11px 25px #168b7d40}.button:active{background:#17666c}
-    .result{border-color:#29434a;background:#0b191e;color:#a8bec1}.result.ok{border-color:#28664f;background:#102820;color:#a2ebc7}.result.bad,.notice.error{border-color:#70434a;background:#2a1c22;color:#ffadb1}.system-item{border-color:#263f46;background:#0d1a20}.system-item strong{color:#d8e8e8}.notice{border-color:#2d5154;background:#10272b;color:#b2cbc9}.notice.success{border-color:#28664f;background:#102a23;color:#9ee6bf}.footer{border-color:#243c41;color:#8fa7ab}.footer strong{color:#d8e8e8}
+    .result{border-color:#29434a;background:#0b191e;color:#a8bec1}.result.ok{border-color:#28664f;background:#102820;color:#a2ebc7}.result.bad,.notice.error{border-color:#70434a;background:#2a1c22;color:#ffadb1}.system-item{border-color:#263f46;background:#0d1a20}.system-item strong{color:#d8e8e8}.notice{border-color:#2d5154;background:#10272b;color:#b2cbc9}.notice.success{border-color:#28664f;background:#102a23;color:#9ee6bf}.notice.warning{border-color:#805d25;background:#332915;color:#f4d38f}.footer{border-color:#243c41;color:#8fa7ab}.footer strong{color:#d8e8e8}
     :focus-visible{outline-color:#74eee0}
+    .notice.warning{border-color:#805d25;background:#332915;color:#f4d38f}
     @media(prefers-reduced-motion:no-preference){.service-card,.button,.nav a,.icon-button{transition-duration:.2s}}
   </style>
 </head>
@@ -62,7 +63,7 @@
       </nav>
       <div class="side-spacer"></div>
       <div class="local-card"><div class="local-top"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v5c0 4.6 2.9 8.3 7 10 4.1-1.7 7-5.4 7-10V6l-7-3Z" stroke="currentColor" stroke-width="1.7"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Локальная диагностика</div><p>Данные остаются на роутере. Внешняя аналитика отключена.</p></div>
-      <div class="side-version"><span>RouterCare</span><b>0.5.0</b></div>
+      <div class="side-version"><span>RouterCare</span><b>0.5.1</b></div>
     </aside>
     <main class="main" id="overview">
       <header class="topbar">
@@ -86,6 +87,7 @@
           <article class="service-card"><div class="service-head"><div class="service-title"><span class="service-icon blue"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2.8 19 6v5.2c0 4.5-2.8 8.1-7 10-4.2-1.9-7-5.5-7-10V6l7-3.2Z" stroke="currentColor" stroke-width="1.7"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><strong>Zapret2</strong><span>Lua-профили · nfqws2</span></div></div><span class="pill not_found" id="zapret2" role="status" aria-live="polite" aria-atomic="true"><i class="dot"></i><span>Проверка…</span></span></div><p class="service-desc">Основное направление проекта. Не запускайте одновременно с legacy-перехватчиком Zapret.</p><div class="service-foot"><span>Движок</span><span>Статус службы</span></div></article>
           <article class="service-card"><div class="service-head"><div class="service-title"><span class="service-icon purple"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h10m0 0-3-3m3 3-3 3M20 17H10m0 0 3-3m-3 3 3 3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="18" cy="7" r="2" stroke="currentColor" stroke-width="1.7"/><circle cx="6" cy="17" r="2" stroke="currentColor" stroke-width="1.7"/></svg></span><div><strong>Mihomo</strong><span>VPN · правила маршрутизации</span></div></div><span class="pill not_found" id="mihomo-service" role="status" aria-live="polite" aria-atomic="true"><i class="dot"></i><span>Проверка…</span></span></div><p class="service-desc">Состояние VPN-службы и безопасная проверка синтаксиса локального конфига.</p><div class="service-foot"><span>Маршрутизация</span><span>Конфиг проверяется отдельно</span></div></article>
         </div>
+        <div class="notice warning" id="dpi-conflict" role="status" aria-live="polite" hidden>Одновременно работают Zapret и Zapret2. Проверьте, нужны ли оба перехватчика: их совместная работа может конфликтовать. RouterCare не останавливает службы и не меняет конфигурацию.</div>
       </section>
       <div class="lower-grid">
         <section class="panel" id="mihomo" aria-labelledby="mihomo-title">
@@ -98,21 +100,23 @@
         </section>
       </div>
       <div class="notice" id="message">Локальная панель не отправляет данные на сторонние серверы. Сейчас доступны просмотр состояния и проверка Mihomo-конфига.</div>
-      <footer class="footer"><span><strong>RouterCare 0.5.0</strong> · локальная диагностика</span><span>Для домашней сети · не публикуйте панель в интернет</span></footer>
+      <footer class="footer"><span><strong>RouterCare 0.5.1</strong> · локальная диагностика</span><span>Для домашней сети · не публикуйте панель в интернет</span></footer>
     </main>
   </div>
   <script>
     const labels={running:"Работает",stopped:"Остановлена",not_found:"Не найдена"};
     const text=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value||"Не указано"};
     function setService(id,state){const el=document.getElementById(id);if(!el)return;el.className="pill "+(state||"not_found");el.querySelector("span").textContent=labels[state]||"Неизвестно"}
+    function isDpiConflict(services){return services?.zapret==="running"&&services?.zapret2==="running"}
+    function updateDpiConflict(services){const el=document.getElementById("dpi-conflict");if(el)el.hidden=!isDpiConflict(services)}
     async function refresh(){
       const button=document.getElementById("refresh"),message=document.getElementById("message"),connection=document.getElementById("connection");button.disabled=true;message.className="notice";message.textContent="Получаю локальный отчёт от роутера…";
       try{const response=await fetch("/cgi-bin/routercare-status",{cache:"no-store",credentials:"same-origin"});if(!response.ok)throw new Error("HTTP "+response.status);const d=await response.json();
         text("model",d.model||d.board);text("release",d.release);text("arch",d.arch);text("overlay",Number.isFinite(d.overlay_free_kib)?(d.overlay_free_kib/1024).toFixed(1)+" МБ":"нет данных");
-        setService("zapret-status",d.services?.zapret);setService("zapret2",d.services?.zapret2);setService("mihomo-service",d.services?.mihomo);
+        setService("zapret-status",d.services?.zapret);setService("zapret2",d.services?.zapret2);setService("mihomo-service",d.services?.mihomo);updateDpiConflict(d.services);
         text("checked",d.checked_at?"Проверено · "+new Date(d.checked_at).toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"}):"Состояние обновлено");text("headline","Роутер на связи");document.getElementById("subhead").textContent="Локальный отчёт получен. Сетевые настройки и правила OpenWrt не менялись.";connection.className="connection online";text("connection-label","РОУТЕР НА СВЯЗИ");
         message.textContent="Отчёт обработан локально. Внешние серверы и аналитика не используются.";
-      }catch(e){text("headline","Нет связи с локальной проверкой");document.getElementById("subhead").textContent="Проверьте установку панели и доступность CGI на роутере.";connection.className="connection offline";text("connection-label","НЕТ СВЯЗИ");message.className="notice error";message.textContent="Локальный API не ответил: "+e.message+". Конфигурация роутера не менялась."}
+      }catch(e){updateDpiConflict({});text("headline","Нет связи с локальной проверкой");document.getElementById("subhead").textContent="Проверьте установку панели и доступность CGI на роутере.";connection.className="connection offline";text("connection-label","НЕТ СВЯЗИ");message.className="notice error";message.textContent="Локальный API не ответил: "+e.message+". Конфигурация роутера не менялась."}
       finally{button.disabled=false}
     }
     async function checkMihomo(){
