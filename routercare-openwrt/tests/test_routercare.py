@@ -72,7 +72,20 @@ class RouterCareTests(unittest.TestCase):
         self.assertIn("theme-color", self.html)
         self.assertIn("prefers-reduced-motion:reduce", self.html)
         self.assertNotRegex(self.html, r"https?://(?:fonts\.googleapis|cdnjs|cdn\.)")
-        self.assertIn("RouterCare 0.5.0", self.html)
+        self.assertIn("RouterCare 0.5.1", self.html)
+
+    def test_parallel_dpi_services_raise_read_only_warning(self) -> None:
+        self.assertIn('id="dpi-conflict"', self.html)
+        self.assertIn('role="status" aria-live="polite" hidden', self.html)
+        self.assertIn("RouterCare не останавливает службы и не меняет конфигурацию", self.html)
+        match = re.search(r"function isDpiConflict\(services\)\{[^}]+\}", self.html)
+        self.assertIsNotNone(match)
+        function = match.group(0) if match else ""
+        harness = function + "\nconst assert=require('node:assert/strict');" \
+            + "assert.equal(isDpiConflict({zapret:'running',zapret2:'running'}),true);" \
+            + "assert.equal(isDpiConflict({zapret:'stopped',zapret2:'running'}),false);" \
+            + "assert.equal(isDpiConflict({zapret:'running',zapret2:'not_found'}),false);"
+        subprocess.run(["node", "-e", harness], check=True)
 
     def test_service_cards_stack_at_tablet_widths(self) -> None:
         tablet = re.search(r"@media\(max-width:720px\)\{(.*?)\}\s*@media\(max-width:490px\)",
