@@ -72,8 +72,8 @@ class OpenWrtZapretTests(unittest.TestCase):
         self.assertIn("theme-color", self.html)
         self.assertIn("prefers-reduced-motion:reduce", self.html)
         self.assertNotRegex(self.html, r"https?://(?:fonts\.googleapis|cdnjs|cdn\.)")
-        self.assertIn("OpenWrt Zapret 0.5.10", self.html)
-        self.assertIn("<b>0.5.10</b>", self.html)
+        self.assertIn("OpenWrt Zapret 0.5.11", self.html)
+        self.assertIn("<b>0.5.11</b>", self.html)
 
 
     def test_domain_list_validator_is_local_and_handles_duplicates_safely(self) -> None:
@@ -110,6 +110,7 @@ assert.equal(result.invalid[0].line,5);
         self.assertIn("Кобальт", self.html)
         self.assertIn("Аметист", self.html)
         self.assertIn("prefers-reduced-motion:reduce", self.html)
+        self.assertIn("width:16px;height:16px;flex:0 0 16px", self.html)
         self.assertIn('content="light"', self.html)
 
     def test_upstream_protocol_catalog_is_filterable_but_not_claimed_as_integrated(self) -> None:
