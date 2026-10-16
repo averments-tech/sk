@@ -45,6 +45,26 @@
     .notice.warning{border-color:#805d25;background:#332915;color:#f4d38f}
     .diagnostic-hint{margin:10px 2px 0;color:#9eb4b8;font-size:9px;line-height:1.5}
     @media(prefers-reduced-motion:no-preference){.service-card,.button,.nav a,.icon-button{transition-duration:.2s}}
+
+    .theme-toggle{width:auto;min-width:80px;padding:0 10px;display:flex;align-items:center;gap:7px;border-color:#27565a;background:linear-gradient(135deg,#112b30,#102127);color:#baffef}
+    .theme-toggle svg{width:16px;height:16px;flex:0 0 16px}.theme-toggle span{font-size:8px;font-weight:850;letter-spacing:.07em;text-transform:uppercase}
+    .signal-bars{height:12px;display:inline-flex;align-items:flex-end;gap:2px;margin-left:2px}.signal-bars i{width:2px;border-radius:2px;background:#476065;height:4px}.signal-bars i:nth-child(2){height:7px}.signal-bars i:nth-child(3){height:10px}.connection.online .signal-bars i{background:#57dfa7;box-shadow:0 0 5px #57dfa755}.connection.offline .signal-bars i{background:#b46a58}
+    .platform-row{display:flex;align-items:center;gap:7px;margin-top:15px}.platform-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;border:1px solid #5dcac33c;border-radius:7px;background:#ffffff0a;color:#c7f7ec;font-size:9px;font-weight:750}.platform-chip svg{width:14px;height:14px}.platform-note{color:#9db6b6;font-size:9px}
+    .flow-track{position:absolute;inset:0;width:100%;height:100%;overflow:visible;color:#73e8d4;opacity:.45}.packet{fill:#9bffe8;opacity:0;filter:drop-shadow(0 0 4px #70ffe3)}
+    @keyframes packet-run{0%{opacity:0;transform:translateX(0)}15%{opacity:1}85%{opacity:1}100%{opacity:0;transform:translateX(38px)}}
+    @media(prefers-reduced-motion:no-preference){.hero.is-online .packet{animation:packet-run 1.8s ease-in-out infinite}.hero.is-online .packet-b{animation-delay:.6s}.hero.is-online .packet-c{animation-delay:1.2s}}
+    @media(prefers-reduced-motion:reduce){.hero.is-online .packet{animation:none;opacity:.85}}
+    :root[data-skin="violet"]{--coral:#9a87ff;--mint:#b6adff;--blue:#75d7ff;--purple:#c6a3ff;--green:#69dfc1}
+    :root[data-skin="violet"] body{background-image:radial-gradient(ellipse at 92% 0%,#38287770 0,transparent 34%),radial-gradient(ellipse at 5% 45%,#22234b60 0,transparent 38%),linear-gradient(145deg,#080d18,#101329 58%,#111329)}
+    :root[data-skin="violet"] .hero{background:linear-gradient(112deg,#211d3c,#111b2b 58%,#1c1836)}
+    :root[data-skin="violet"] .brand-mark{background:linear-gradient(145deg,#ded5ff,#8f79ff)}
+    :root[data-skin="violet"] .nav a.active{background:linear-gradient(105deg,#30245b,#201d3b);box-shadow:inset 3px 0 var(--coral),0 8px 22px #0003}
+    :root[data-skin="violet"] .service-card,:root[data-skin="violet"] .panel{border-color:#343450;background:linear-gradient(145deg,#171b2c,#111823)}
+    :root[data-skin="violet"] .signal-tile{border-color:#343450;background:linear-gradient(130deg,#171b2c,#111823)}
+    :root[data-skin="violet"] .button{border-color:#7765db;background:linear-gradient(135deg,#6855cb,#4648a1);box-shadow:0 8px 20px #5943bd40}
+    :root[data-skin="violet"] .button:hover{background:linear-gradient(135deg,#806de0,#5559bd);border-color:#b6a8ff}
+    :root[data-skin="violet"] .theme-toggle{border-color:#6254a7;background:linear-gradient(135deg,#262147,#161b2b);color:#e0d8ff}
+    @media(max-width:720px){.theme-toggle{min-width:44px;min-height:44px}.platform-row{margin-top:12px}}
   </style>
 </head>
 <body>
@@ -64,17 +84,17 @@
       </nav>
       <div class="side-spacer"></div>
       <div class="local-card"><div class="local-top"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v5c0 4.6 2.9 8.3 7 10 4.1-1.7 7-5.4 7-10V6l-7-3Z" stroke="currentColor" stroke-width="1.7"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Локальная диагностика</div><p>Данные остаются на роутере. Внешняя аналитика отключена.</p></div>
-      <div class="side-version"><span>OpenWrt Zapret</span><b>0.5.5</b></div>
+      <div class="side-version"><span>OpenWrt Zapret</span><b>0.5.6</b></div>
     </aside>
     <main class="main" id="overview">
       <header class="topbar">
         <div class="crumb"><span>OpenWrt</span><span aria-hidden="true">/</span><strong>Панель управления</strong></div>
-        <div class="top-actions"><div class="connection" id="connection"><i class="dot"></i><span id="connection-label">ПРОВЕРКА</span></div><button class="icon-button" id="refresh" type="button" aria-label="Обновить состояние" title="Обновить состояние"><svg viewBox="0 0 24 24" fill="none"><path d="M20 7v5h-5M4 17v-5h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.1 9a6.5 6.5 0 0 1 11-2L20 12M4 12l2.9 5a6.5 6.5 0 0 0 11-2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+        <div class="top-actions"><div class="connection" id="connection" title="Связь с локальным API; скорость интернета не измеряется"><i class="dot"></i><span id="connection-label">ПРОВЕРКА</span><span class="signal-bars" aria-hidden="true"><i></i><i></i><i></i></span></div><button class="icon-button theme-toggle" id="theme-toggle" type="button" aria-label="Выбрать аметистовую тему" aria-pressed="false" title="Сменить акцентную тему"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18h1.1a2.1 2.1 0 0 0 1.5-3.6 1.6 1.6 0 0 1 1.1-2.7H18a3 3 0 0 0 3-3c0-4.8-4-8.7-9-8.7Z" stroke="currentColor" stroke-width="1.7"/><circle cx="7.5" cy="11" r="1" fill="currentColor"/><circle cx="10" cy="7.5" r="1" fill="currentColor"/><circle cx="15" cy="8" r="1" fill="currentColor"/></svg><span id="theme-label">Бирюза</span></button><button class="icon-button" id="refresh" type="button" aria-label="Обновить состояние" title="Обновить состояние"><svg viewBox="0 0 24 24" fill="none"><path d="M20 7v5h-5M4 17v-5h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.1 9a6.5 6.5 0 0 1 11-2L20 12M4 12l2.9 5a6.5 6.5 0 0 0 11-2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
       </header>
       <section class="page-title"><div><div class="eyebrow">OPENWRT / СЕТЕВАЯ КОНСОЛЬ</div><h1>Состояние сети</h1><p>Состояние сетевых служб и инструменты быстрой проверки.</p></div><span class="section-label" id="checked">Данные ещё не получены</span></section>
       <section class="hero" aria-label="Сводка сетевой системы">
-        <div class="hero-content"><span class="hero-tag"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v5c0 4.6 2.9 8.3 7 10 4.1-1.7 7-5.4 7-10V6l-7-3Z" stroke="currentColor" stroke-width="1.7"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>СЕТЕВЫЕ СЛУЖБЫ</span><h2 id="headline">Панель готова к проверке</h2><p id="subhead">Получите локальное состояние OpenWrt, Zapret, Zapret2 и Mihomo. Эта версия не меняет конфигурацию роутера.</p></div>
-        <div class="hero-visual" aria-hidden="true"><span class="halo"></span><span class="router-illustration"><svg viewBox="0 0 64 64" fill="none"><path d="M12 29h40a5 5 0 0 1 5 5v12a5 5 0 0 1-5 5H12a5 5 0 0 1-5-5V34a5 5 0 0 1 5-5Z" stroke="currentColor" stroke-width="2.4"/><path d="M18 24c7-7 21-7 28 0M24 19c4-4 12-4 16 0" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="19" cy="42" r="2.5" fill="currentColor"/><circle cx="29" cy="42" r="2.5" fill="currentColor"/><path d="M39 42h9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><i class="signal"></i></span><i class="node one"></i><i class="node two"></i></div>
+        <div class="hero-content"><span class="hero-tag"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v5c0 4.6 2.9 8.3 7 10 4.1-1.7 7-5.4 7-10V6l-7-3Z" stroke="currentColor" stroke-width="1.7"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>СЕТЕВЫЕ СЛУЖБЫ</span><h2 id="headline">Панель готова к проверке</h2><p id="subhead">Получите локальное состояние OpenWrt, Zapret, Zapret2 и Mihomo. Эта версия не меняет конфигурацию роутера.</p><div class="platform-row" aria-label="Клиентские платформы: macOS и Linux через браузер"><span class="platform-chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.8 12.2c0-1.9 1.5-2.9 1.6-3-1-1.4-2.4-1.6-3-1.6-1.2-.1-2.3.7-3 .7s-1.5-.7-2.5-.7c-1.3 0-2.4.8-3.1 2-1.3 2.3-.4 5.5.9 7.3.6.9 1.4 1.8 2.3 1.8.9 0 1.2-.6 2.4-.6s1.5.6 2.5.6 1.7-.8 2.3-1.8c.7-1 1-2 1-2.1-.1 0-2-.8-2-2.6ZM13.9 5.8c.5-.5.8-1.3.8-2.1-.7 0-1.5.5-2 1-.5.5-.8 1.3-.8 2.1.8.1 1.5-.4 2-1Z" fill="currentColor"/></svg>macOS</span><span class="platform-chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2c-4 0-6.7 3.1-6.7 7.1 0 2.4 1 4.2 2.4 5.4l-.9 3.1c-.2.8.5 1.4 1.2 1l2.5-1.5c.5.1 1 .2 1.5.2s1-.1 1.5-.2l2.5 1.5c.7.4 1.4-.2 1.2-1l-.9-3.1c1.5-1.2 2.4-3 2.4-5.4 0-4-2.7-7.1-6.7-7.1Z" fill="currentColor"/><ellipse cx="12" cy="12.7" rx="3.4" ry="4.6" fill="#0b1b20"/><circle cx="9.6" cy="8.7" r=".8" fill="#0b1b20"/><circle cx="14.4" cy="8.7" r=".8" fill="#0b1b20"/><path d="m12 10.2-1.4 1.3h2.8L12 10.2Z" fill="#ffbd80"/></svg>Linux</span><span class="platform-note">в браузере</span></div></div>
+        <div class="hero-visual" aria-hidden="true"><svg class="flow-track" viewBox="0 0 185 155"><path d="M4 77h49" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 5"/><circle class="packet packet-a" cx="5" cy="77" r="2.8"/><circle class="packet packet-b" cx="5" cy="77" r="2.2"/><circle class="packet packet-c" cx="5" cy="77" r="1.7"/></svg><span class="halo"></span><span class="router-illustration"><svg viewBox="0 0 64 64" fill="none"><path d="M12 29h40a5 5 0 0 1 5 5v12a5 5 0 0 1-5 5H12a5 5 0 0 1-5-5V34a5 5 0 0 1 5-5Z" stroke="currentColor" stroke-width="2.4"/><path d="M18 24c7-7 21-7 28 0M24 19c4-4 12-4 16 0" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="19" cy="42" r="2.5" fill="currentColor"/><circle cx="29" cy="42" r="2.5" fill="currentColor"/><path d="M39 42h9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><i class="signal"></i></span><i class="node one"></i><i class="node two"></i></div>
       </section>
       <section class="signal-grid" aria-label="Возможности панели">
         <div class="signal-tile"><span class="signal-icon coral" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M13.4 2.8 5.7 13h5.8l-.7 8.2 7.5-10.2h-5.8l.9-8.2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span><div><b>Службы</b><span>3 локальных статуса</span></div></div>
@@ -101,23 +121,28 @@
         </section>
       </div>
       <div class="notice" id="message">Локальная панель не отправляет данные на сторонние серверы. Сейчас доступны просмотр состояния и проверка Mihomo-конфига.</div>
-      <footer class="footer"><span><strong>OpenWrt Zapret 0.5.5</strong> · локальная диагностика</span><span>Для домашней сети · не публикуйте панель в интернет</span></footer>
+      <footer class="footer"><span><strong>OpenWrt Zapret 0.5.6</strong> · локальная диагностика</span><span>Для домашней сети · не публикуйте панель в интернет</span></footer>
     </main>
   </div>
   <script>
+    const themeToggle=document.getElementById("theme-toggle"),themeLabel=document.getElementById("theme-label");
+    function applyAccent(skin,persist=true){const violet=skin==="violet";document.documentElement.dataset.skin=violet?"violet":"teal";themeToggle.setAttribute("aria-pressed",String(violet));themeToggle.setAttribute("aria-label",violet?"Выбрать бирюзовую тему":"Выбрать аметистовую тему");themeLabel.textContent=violet?"Аметист":"Бирюза";if(persist){try{localStorage.setItem("openwrt-zapret-accent",violet?"violet":"teal")}catch(e){}}}
+    try{applyAccent(localStorage.getItem("openwrt-zapret-accent")||"teal",false)}catch(e){applyAccent("teal",false)}
+    themeToggle.addEventListener("click",()=>applyAccent(document.documentElement.dataset.skin==="violet"?"teal":"violet"));
     const labels={running:"Работает",stopped:"Остановлена",not_found:"Не найдена",unknown:"Нет данных"};
     const text=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value||"Не указано"};
+    function setConnectionState(online){const connection=document.getElementById("connection"),hero=document.querySelector(".hero");if(connection)connection.className="connection "+(online?"online":"offline");if(hero)hero.classList.toggle("is-online",online)}
     function setService(id,state){const el=document.getElementById(id);if(!el)return;el.className="pill "+(state||"not_found");el.querySelector("span").textContent=labels[state]||"Неизвестно"}
     function isDpiConflict(services){return services?.zapret==="running"&&services?.zapret2==="running"}
     function updateDpiConflict(services){const el=document.getElementById("dpi-conflict");if(el)el.hidden=!isDpiConflict(services)}
     async function refresh(){
-      const button=document.getElementById("refresh"),message=document.getElementById("message"),connection=document.getElementById("connection");button.disabled=true;message.className="notice";message.textContent="Получаю локальный отчёт от роутера…";
+      const button=document.getElementById("refresh"),message=document.getElementById("message");button.disabled=true;message.className="notice";message.textContent="Получаю локальный отчёт от роутера…";
       try{const response=await fetch("/cgi-bin/routercare-status",{cache:"no-store",credentials:"same-origin"});if(!response.ok)throw new Error("HTTP "+response.status);const d=await response.json();
         text("model",d.model||d.board);text("release",d.release);text("arch",d.arch);text("overlay",Number.isFinite(d.overlay_free_kib)?(d.overlay_free_kib/1024).toFixed(1)+" МБ":"нет данных");
         setService("zapret-status",d.services?.zapret);setService("zapret2",d.services?.zapret2);setService("mihomo-service",d.services?.mihomo);updateDpiConflict(d.services);
-        text("checked",d.checked_at?"Проверено · "+new Date(d.checked_at).toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"}):"Состояние обновлено");text("headline","Роутер на связи");document.getElementById("subhead").textContent="Локальный отчёт получен. Сетевые настройки и правила OpenWrt не менялись.";connection.className="connection online";text("connection-label","РОУТЕР НА СВЯЗИ");
+        text("checked",d.checked_at?"Проверено · "+new Date(d.checked_at).toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"}):"Состояние обновлено");text("headline","Роутер на связи");document.getElementById("subhead").textContent="Локальный отчёт получен. Сетевые настройки и правила OpenWrt не менялись.";setConnectionState(true);text("connection-label","РОУТЕР НА СВЯЗИ");
         message.textContent="Отчёт обработан локально. Внешние серверы и аналитика не используются.";
-      }catch(e){setService("zapret-status","unknown");setService("zapret2","unknown");setService("mihomo-service","unknown");updateDpiConflict({});text("headline","Нет связи с локальной проверкой");document.getElementById("subhead").textContent="Проверьте установку панели и доступность CGI на роутере.";connection.className="connection offline";text("connection-label","НЕТ СВЯЗИ");message.className="notice error";message.textContent="Локальный API не ответил: "+e.message+". Конфигурация роутера не менялась."}
+      }catch(e){setService("zapret-status","unknown");setService("zapret2","unknown");setService("mihomo-service","unknown");updateDpiConflict({});text("headline","Нет связи с локальной проверкой");document.getElementById("subhead").textContent="Проверьте установку панели и доступность CGI на роутере.";setConnectionState(false);text("connection-label","НЕТ СВЯЗИ");message.className="notice error";message.textContent="Локальный API не ответил: "+e.message+". Конфигурация роутера не менялась."}
       finally{button.disabled=false}
     }
     async function checkMihomo(){
