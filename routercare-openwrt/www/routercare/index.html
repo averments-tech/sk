@@ -43,6 +43,7 @@
     .result{border-color:#29434a;background:#0b191e;color:#a8bec1}.result.ok{border-color:#28664f;background:#102820;color:#a2ebc7}.result.bad,.notice.error{border-color:#70434a;background:#2a1c22;color:#ffadb1}.system-item{border-color:#263f46;background:#0d1a20}.system-item strong{color:#d8e8e8}.notice{border-color:#2d5154;background:#10272b;color:#b2cbc9}.notice.success{border-color:#28664f;background:#102a23;color:#9ee6bf}.notice.warning{border-color:#805d25;background:#332915;color:#f4d38f}.footer{border-color:#243c41;color:#8fa7ab}.footer strong{color:#d8e8e8}
     :focus-visible{outline-color:#74eee0}
     .notice.warning{border-color:#805d25;background:#332915;color:#f4d38f}
+    .diagnostic-hint{margin:10px 2px 0;color:#9eb4b8;font-size:9px;line-height:1.5}
     @media(prefers-reduced-motion:no-preference){.service-card,.button,.nav a,.icon-button{transition-duration:.2s}}
   </style>
 </head>
@@ -63,7 +64,7 @@
       </nav>
       <div class="side-spacer"></div>
       <div class="local-card"><div class="local-top"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v5c0 4.6 2.9 8.3 7 10 4.1-1.7 7-5.4 7-10V6l-7-3Z" stroke="currentColor" stroke-width="1.7"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Локальная диагностика</div><p>Данные остаются на роутере. Внешняя аналитика отключена.</p></div>
-      <div class="side-version"><span>RouterCare</span><b>0.5.1</b></div>
+      <div class="side-version"><span>RouterCare</span><b>0.5.2</b></div>
     </aside>
     <main class="main" id="overview">
       <header class="topbar">
@@ -92,7 +93,7 @@
       <div class="lower-grid">
         <section class="panel" id="mihomo" aria-labelledby="mihomo-title">
           <div class="panel-head"><span class="service-icon purple"><svg viewBox="0 0 24 24" fill="none"><path d="M8 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9l-5-5h-2" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 4v5h5M8 13h8m-8 4h6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span><div><h3 id="mihomo-title">Проверка Mihomo</h3><p>Только проверка синтаксиса локального YAML</p></div></div>
-          <div class="check-row"><div class="check-copy"><strong>Конфигурация маршрутизации</strong><span>Содержимое и секреты не выводятся в панель.</span></div><button class="button" id="mihomo-check" type="button"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Проверить конфиг</button></div><div class="result" id="mihomo-result" aria-live="polite">Команда: mihomo -t · файл не изменяется.</div>
+          <div class="check-row"><div class="check-copy"><strong>Конфигурация маршрутизации</strong><span>Содержимое и секреты не выводятся в панель.</span></div><button class="button" id="mihomo-check" type="button"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Проверить конфиг</button></div><div class="result" id="mihomo-result" aria-live="polite">Команда: mihomo -t · файл не изменяется.</div><p class="diagnostic-hint" id="mihomo-limit" role="note">Успешный тест подтверждает разбор конфигурации, но не проверяет соединение с VPN-узлами или доступ в интернет.</p>
         </section>
         <section class="panel" id="system" aria-labelledby="system-title">
           <div class="panel-head"><span class="service-icon blue"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.7"/><path d="M8 8h8v8H8zM9 1.8v2.5m6-2.5v2.5M9 19.7v2.5m6-2.5v2.5M1.8 9h2.5m-2.5 6h2.5m15.4-6h2.5m-2.5 6h2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><div><h3 id="system-title">Параметры роутера</h3><p>Базовая информация системы</p></div></div>
@@ -100,7 +101,7 @@
         </section>
       </div>
       <div class="notice" id="message">Локальная панель не отправляет данные на сторонние серверы. Сейчас доступны просмотр состояния и проверка Mihomo-конфига.</div>
-      <footer class="footer"><span><strong>RouterCare 0.5.1</strong> · локальная диагностика</span><span>Для домашней сети · не публикуйте панель в интернет</span></footer>
+      <footer class="footer"><span><strong>RouterCare 0.5.2</strong> · локальная диагностика</span><span>Для домашней сети · не публикуйте панель в интернет</span></footer>
     </main>
   </div>
   <script>
@@ -122,7 +123,7 @@
     async function checkMihomo(){
       const button=document.getElementById("mihomo-check"),result=document.getElementById("mihomo-result"),message=document.getElementById("message");button.disabled=true;result.className="result";result.textContent="Проверяю локальный конфиг…";
       try{const response=await fetch("/cgi-bin/routercare-mihomo-check",{cache:"no-store",credentials:"same-origin"});if(!response.ok)throw new Error("HTTP "+response.status);const d=await response.json();
-        if(d.result==="valid"){result.className="result ok";result.textContent="Проверка завершена: конфиг корректен.";message.className="notice success";message.textContent="mihomo -t завершился успешно. Файл не менялся, его содержимое не выводилось."}
+        if(d.result==="valid"){result.className="result ok";result.textContent="Проверка завершена: синтаксис конфига корректен.";message.className="notice success";message.textContent="mihomo -t завершился успешно. Файл не менялся, его содержимое не выводилось."}
         else if(d.result==="invalid"){result.className="result bad";result.textContent="Проверка завершилась ошибкой.";message.className="notice error";message.textContent="Mihomo сообщил об ошибке конфигурации. Детальный вывод и секреты не показываются; проверьте журнал Mihomo локально по SSH."}
         else if(d.result==="no_config"){result.className="result bad";result.textContent="Файл конфигурации Mihomo не найден.";message.textContent="Не найден стандартный файл Mihomo. Ничего не изменено."}
         else if(d.result==="no_binary"){result.className="result bad";result.textContent="Исполняемый файл Mihomo не найден.";message.textContent="Команда mihomo недоступна. Ничего не установлено и не изменено."}
