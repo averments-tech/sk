@@ -63,18 +63,27 @@ class OpenWrtZapretTests(unittest.TestCase):
 
     def test_ui_keeps_reduced_motion_and_local_assets(self) -> None:
         self.assertIn("prefers-reduced-motion:reduce", self.html)
-        self.assertIn("Обновление статуса", self.html)
-        self.assertIn("без автообновления", self.html)
-        self.assertIn("signal-grid", self.html)
+        self.assertIn('class="shortcut-grid"', self.html)
+        self.assertIn("Быстрый переход по панели", self.html)
         self.assertIn("skip-link", self.html)
         self.assertIn('content="light"', self.html)
         self.assertIn("color-scheme:light", self.html)
         self.assertIn("theme-color", self.html)
         self.assertIn("prefers-reduced-motion:reduce", self.html)
         self.assertNotRegex(self.html, r"https?://(?:fonts\.googleapis|cdnjs|cdn\.)")
-        self.assertIn("OpenWrt Zapret 0.5.11", self.html)
-        self.assertIn("<b>0.5.11</b>", self.html)
+        self.assertIn("OpenWrt Zapret 0.5.12", self.html)
+        self.assertIn("<b>0.5.12</b>", self.html)
 
+
+    def test_shortcut_cards_are_accessible_and_target_real_sections(self) -> None:
+        self.assertIn('<nav class="shortcut-grid" aria-label="Быстрый переход по панели">', self.html)
+        self.assertEqual(self.html.count('class="shortcut-card '), 4)
+        for target in ("zapret-service", "list-check", "protocols", "mihomo"):
+            self.assertIn(f'href="#{target}"', self.html)
+            self.assertIn(f'id="{target}"', self.html)
+        for marker in ("Списки доменов", "VPN-протоколы", "без импорта", "файл не меняется"):
+            self.assertIn(marker, self.html)
+        self.assertIn("@media(prefers-reduced-motion:reduce){.shortcut-card", self.html)
 
     def test_domain_list_validator_is_local_and_handles_duplicates_safely(self) -> None:
         self.assertIn('id="domain-input"', self.html)
@@ -218,6 +227,8 @@ assert.equal(protocolMatches('tcp','udp'),false);
                       (root / "install.sh").read_text(encoding="utf-8"))
         self.assertIn('exec "$ROOT_DIR/routercare-openwrt/uninstall.sh" "$@"',
                       (root / "uninstall.sh").read_text(encoding="utf-8"))
+        self.assertIn("OpenWrt Zapret 0.5.12 установлена",
+                      (ROOT / "install.sh").read_text(encoding="utf-8"))
 
     def test_status_cgi_returns_well_formed_service_json(self) -> None:
         headers, body = run_cgi("www/cgi-bin/routercare-status", "GET")

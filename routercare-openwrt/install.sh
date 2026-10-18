@@ -37,7 +37,7 @@ chmod 0644 "$WEB_DIR/index.html"
 chmod 0755 "$CGI_FILE"
 chmod 0755 "$MIHOMO_CGI_FILE"
 
-printf 'OpenWrt Zapret 0.5.4 установлена.\n'
+printf 'OpenWrt Zapret 0.5.12 установлена.\n'
 printf 'Страница: http://<адрес-роутера>/routercare/\n'
 printf 'Резервная копия заменённых файлов: %s\n' "$BACKUP_ROOT/$STAMP"
 printf 'Меню, firewall, DNS и службы не менялись.\n'
