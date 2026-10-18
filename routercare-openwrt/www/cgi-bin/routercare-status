@@ -24,6 +24,22 @@ service_state() {
     fi
 }
 
+strategy_markers() {
+    config_file=$1
+    [ -r "$config_file" ] || return 0
+    awk '
+        /^[[:space:]]*option NFQWS_OPT[[:space:]]/ { in_options=1; next }
+        in_options && /^[[:space:]]*\047[[:space:]]*$/ { in_options=0; next }
+        in_options && /^[[:space:]]*#(v[0-9]+|Yv[0-9]+|Dv[0-9]+|Gv[0-9]+|udp443)[[:space:]]*$/ {
+            marker=$0
+            sub(/^[[:space:]]*#/, "", marker)
+            sub(/[[:space:]]*$/, "", marker)
+            if (!seen[marker]++) markers = markers (markers == "" ? "" : " / ") marker
+        }
+        END { print markers }
+    ' "$config_file"
+}
+
 if [ "${REQUEST_METHOD:-GET}" != GET ]; then
     printf 'Status: 405 Method Not Allowed\r\n'
     printf 'Content-Type: application/json; charset=utf-8\r\n\r\n'
@@ -37,17 +53,31 @@ arch=$(sed -n "s/^DISTRIB_ARCH=['\"]\?\(.*\)['\"]\?$/\1/p" /etc/openwrt_release 
 board=$(ubus call system board 2>/dev/null | jsonfilter -e '@.model' 2>/dev/null || true)
 free_kib=$(df -k /overlay 2>/dev/null | awk 'NR == 2 {print $4}')
 case "$free_kib" in ''|*[!0-9]*) free_kib=null ;; esac
+zapret_state=$(service_state zapret nfqws)
+zapret2_state=$(service_state zapret2 nfqws2)
+mihomo_state=$(service_state mihomo mihomo)
+strategy_state=not_applicable
+strategy_value=
+if [ "$zapret_state" = running ] && [ "$zapret2_state" != running ]; then
+    strategy_state=unavailable
+    if [ -r /etc/config/zapret ]; then
+        strategy_value=$(strategy_markers /etc/config/zapret)
+        [ -n "$strategy_value" ] && strategy_state=detected
+    fi
+fi
 
 printf 'Content-Type: application/json; charset=utf-8\r\n'
 printf 'Cache-Control: no-store\r\n'
 printf 'X-Content-Type-Options: nosniff\r\n\r\n'
-printf '{"ok":true,"model":"%s","board":"%s","release":"%s","arch":"%s","overlay_free_kib":%s,"services":{"zapret":"%s","zapret2":"%s","mihomo":"%s"},"checked_at":"%s"}\n' \
+printf '{"ok":true,"model":"%s","board":"%s","release":"%s","arch":"%s","overlay_free_kib":%s,"services":{"zapret":"%s","zapret2":"%s","mihomo":"%s"},"strategy":{"state":"%s","markers":"%s"},"checked_at":"%s"}\n' \
     "$(json_escape "$model")" \
     "$(json_escape "$board")" \
     "$(json_escape "$release")" \
     "$(json_escape "$arch")" \
     "$free_kib" \
-    "$(service_state zapret nfqws)" \
-    "$(service_state zapret2 nfqws2)" \
-    "$(service_state mihomo mihomo)" \
+    "$zapret_state" \
+    "$zapret2_state" \
+    "$mihomo_state" \
+    "$strategy_state" \
+    "$(json_escape "$strategy_value")" \
     "$(date '+%Y-%m-%dT%H:%M:%S%z' 2>/dev/null || true)"

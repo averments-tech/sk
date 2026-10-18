@@ -7,6 +7,7 @@ import json
 import os
 import re
 import subprocess
+import tempfile
 import unittest
 from html.parser import HTMLParser
 from pathlib import Path
@@ -71,8 +72,8 @@ class OpenWrtZapretTests(unittest.TestCase):
         self.assertIn("color-scheme:light", self.html)
         self.assertIn("theme-color", self.html)
         self.assertNotRegex(self.html, r"https?://(?:fonts\.googleapis|cdnjs|cdn\.)")
-        self.assertIn("OpenWrt Zapret 0.5.14", self.html)
-        self.assertIn("<b>0.5.14</b>", self.html)
+        self.assertIn("OpenWrt Zapret 0.5.15", self.html)
+        self.assertIn("<b>0.5.15</b>", self.html)
     def test_navigation_only_targets_live_panel_sections(self) -> None:
         for target in ("overview", "zapret-service", "list-check", "mihomo", "system", "console"):
             self.assertIn(f'href="#{target}"', self.html)
@@ -226,7 +227,7 @@ for(const command of ['status; reboot','status arg','sh','help\\nrm -rf /','']) 
                       (root / "install.sh").read_text(encoding="utf-8"))
         self.assertIn('exec "$ROOT_DIR/routercare-openwrt/uninstall.sh" "$@"',
                       (root / "uninstall.sh").read_text(encoding="utf-8"))
-        self.assertIn("OpenWrt Zapret 0.5.14 установлена",
+        self.assertIn("OpenWrt Zapret 0.5.15 установлена",
                       (ROOT / "install.sh").read_text(encoding="utf-8"))
     def test_status_cgi_returns_well_formed_service_json(self) -> None:
         headers, body = run_cgi("www/cgi-bin/routercare-status", "GET")
@@ -234,6 +235,35 @@ for(const command of ['status; reboot','status arg','sh','help\\nrm -rf /','']) 
         self.assertIs(body["ok"], True)
         self.assertEqual(set(body["services"]), {"zapret", "zapret2", "mihomo"})
         self.assertIn(body["services"]["zapret"], {"running", "stopped", "not_found"})
+        self.assertEqual(set(body["strategy"]), {"state", "markers"})
+        self.assertIn(body["strategy"]["state"], {"detected", "unavailable", "not_applicable"})
+
+    def test_strategy_status_reads_allowlisted_markers_without_exposing_config(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp = Path(temp_dir)
+            config = temp / "zapret"
+            config.write_text("config zapret 'main'\n option NFQWS_OPT '\n#v7\n#Yv27\n#Dv1\n#Gv1\n#udp443\n#PKH\n--private-option=do-not-show\n'\n", encoding="utf-8")
+            script = (ROOT / "www/cgi-bin/routercare-status").read_text(encoding="utf-8")
+            script = script.replace("/etc/config/zapret", str(config))
+            script = script.replace("$(service_state zapret nfqws)", '"running"')
+            script = script.replace("$(service_state zapret2 nfqws2)", '"stopped"')
+            script_path = temp / "status-cgi"
+            script_path.write_text(script, encoding="utf-8")
+            env = os.environ.copy()
+            env["REQUEST_METHOD"] = "GET"
+            output = subprocess.run(["sh", str(script_path)], env=env, text=True,
+                                    capture_output=True, check=True).stdout
+            body = json.loads(re.split(r"\r?\n\r?\n", output, maxsplit=1)[1])
+            self.assertEqual(body["strategy"], {"state": "detected", "markers": "v7 / Yv27 / Dv1 / Gv1 / udp443"})
+            self.assertNotIn("PKH", body["strategy"]["markers"])
+            self.assertNotIn("do-not-show", output)
+            self.assertIn("--private-option=do-not-show", config.read_text(encoding="utf-8"))
+            conflict_script = temp / "status-cgi-conflict"
+            conflict_script.write_text(script.replace('zapret2_state="stopped"', 'zapret2_state="running"'), encoding="utf-8")
+            conflict_output = subprocess.run(["sh", str(conflict_script)], env=env, text=True,
+                                             capture_output=True, check=True).stdout
+            conflict_body = json.loads(re.split(r"\r?\n\r?\n", conflict_output, maxsplit=1)[1])
+            self.assertEqual(conflict_body["strategy"], {"state": "not_applicable", "markers": ""})
 
     def test_mihomo_checker_rejects_non_get_without_running_a_check(self) -> None:
         headers, body = run_cgi("www/cgi-bin/routercare-mihomo-check", "POST")

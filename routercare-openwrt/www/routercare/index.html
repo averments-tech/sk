@@ -26,6 +26,14 @@
 @media(max-width:490px){.topbar{flex-wrap:wrap}.main{padding-left:13px;padding-right:13px}.crumb{font-size:9px}.connection{padding:7px 8px;font-size:8px}.icon-button{width:44px;height:44px}.page-title{align-items:flex-start;flex-direction:column;gap:5px;margin-bottom:15px}.page-title h1{font-size:30px}.page-title p{font-size:11px}.hero{border-radius:16px}.hero-content{max-width:100%}.hero-visual{right:-44px;top:42px;opacity:.16}.hero h2{font-size:21px}.signal-grid{grid-template-columns:1fr;gap:6px}.signal-tile{padding:9px 11px}.signal-icon{width:29px;height:29px;flex-basis:29px}.signal-tile span{margin-top:0}.services{gap:9px}.service-head{align-items:center;flex-direction:row}.pill{margin-left:0}.service-desc{font-size:10px}.section-head{align-items:flex-start;flex-direction:column}.check-row{align-items:flex-start;flex-direction:column}.button{width:100%}.panel{padding:15px}.system-grid{gap:6px}.system-item{padding:8px}.system-item strong{font-size:10px}.footer{display:grid}.domain-actions{align-items:stretch}.domain-actions .button{flex:1;justify-content:center;padding:0 8px}.domain-input{min-height:150px;font-size:16px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
+  <style>
+    .strategy-panel{margin-top:12px}
+    .strategy-grid{display:grid;grid-template-columns:minmax(140px,.55fr) minmax(0,1fr);gap:9px}
+    .strategy-markers{display:flex;flex-wrap:wrap;gap:6px;margin-top:5px}
+    .strategy-marker{padding:3px 7px;border:1px solid #dbe5f6;border-radius:6px;background:#edf2ff;color:#3158b8;font:700 10px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace}
+    @media(max-width:600px){.strategy-grid{grid-template-columns:1fr}}
+    @media(prefers-reduced-motion:reduce){.strategy-panel{scroll-behavior:auto}}
+  </style>
 </head>
 <body>
   <a class="skip-link" href="#overview">Перейти к содержимому</a>
@@ -46,7 +54,7 @@
       </nav>
       <div class="side-spacer"></div>
       <div class="local-card"><div class="local-top"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v5c0 4.6 2.9 8.3 7 10 4.1-1.7 7-5.4 7-10V6l-7-3Z" stroke="currentColor" stroke-width="1.7"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Локальная диагностика</div><p>Данные остаются на роутере. Внешняя аналитика отключена.</p></div>
-      <div class="side-version"><span>OpenWrt Zapret</span><b>0.5.14</b></div>
+      <div class="side-version"><span>OpenWrt Zapret</span><b>0.5.15</b></div>
     </aside>
     <main class="main" id="overview">
       <header class="topbar">
@@ -67,6 +75,11 @@
           <article class="service-card"><div class="service-head"><div class="service-title"><span class="service-icon purple"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h10m0 0-3-3m3 3-3 3M20 17H10m0 0 3-3m-3 3 3 3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="18" cy="7" r="2" stroke="currentColor" stroke-width="1.7"/><circle cx="6" cy="17" r="2" stroke="currentColor" stroke-width="1.7"/></svg></span><div><strong>Mihomo</strong><span>VPN · правила маршрутизации</span></div></div><span class="pill not_found" id="mihomo-service" role="status" aria-live="polite" aria-atomic="true"><i class="dot"></i><span>Проверка…</span></span></div><p class="service-desc">Состояние VPN-службы и безопасная проверка синтаксиса локального конфига.</p><div class="service-foot"><span>Маршрутизация</span><span>Конфиг проверяется отдельно</span></div></article>
         </div>
         <div class="notice warning" id="dpi-conflict" role="status" aria-live="polite" hidden>Одновременно работают Zapret и Zapret2. Проверьте, нужны ли оба перехватчика: их совместная работа может конфликтовать. OpenWrt Zapret не останавливает службы и не меняет конфигурацию.</div>
+        <section class="panel strategy-panel" aria-labelledby="strategy-title">
+          <div class="panel-head"><span class="service-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M5 4h14v16H5zM8 8h8M8 12h5M8 16h8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><h3 id="strategy-title">Стратегия Zapret v1</h3><p>Только чтение известных меток · без переключения</p></div></div>
+          <div class="strategy-grid"><div class="system-item"><span>Состояние</span><strong id="strategy-state" role="status" aria-live="polite">Получаю данные…</strong></div><div class="system-item"><span>Метки в конфигурации</span><div class="strategy-markers" id="strategy-markers">—</div></div></div>
+          <p class="diagnostic-hint">Читаются только метки vN, YvN, DvN, GvN и udp443 из <code>/etc/config/zapret</code> при активном Zapret v1. Это не проверка обхода; строки параметров не показываются.</p>
+        </section>
       </section>
       <section class="panel domain-check" id="list-check" aria-labelledby="list-check-title">
         <div class="panel-head"><span class="service-icon blue"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="m16 17 2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><h3 id="list-check-title">Проверка списка доменов</h3><p>Локальная проверка формата · без сетевых запросов</p></div></div>
@@ -96,7 +109,7 @@
         </div>
         <p class="console-note"><strong>Безопасный режим.</strong> Консоль принимает только четыре команды: справка, чтение статуса через локальный CGI, тест конфигурации Mihomo без вывода содержимого и очистка экрана. Shell-команды, аргументы, установка и изменение настроек не выполняются.</p>
       </section>
-      <footer class="footer"><span><strong>OpenWrt Zapret 0.5.14</strong> · локальная диагностика</span><span>Для домашней сети · не публикуйте панель в интернет</span></footer>
+      <footer class="footer"><span><strong>OpenWrt Zapret 0.5.15</strong> · локальная диагностика</span><span>Для домашней сети · не публикуйте панель в интернет</span></footer>
     </main>
   </div>
   <script>
@@ -111,14 +124,22 @@
     function setService(id,state){const el=document.getElementById(id);if(!el)return;el.className="pill "+(state||"not_found");el.querySelector("span").textContent=labels[state]||"Неизвестно"}
     function isDpiConflict(services){return services?.zapret==="running"&&services?.zapret2==="running"}
     function updateDpiConflict(services){const el=document.getElementById("dpi-conflict");if(el)el.hidden=!isDpiConflict(services)}
+    function updateStrategy(strategy){
+      const state=document.getElementById("strategy-state"),target=document.getElementById("strategy-markers");
+      target.replaceChildren();
+      const markers=String(strategy?.markers||"").split(" / ").filter(marker=>/^(?:v\d+|Yv\d+|Dv\d+|Gv\d+|udp443)$/.test(marker));
+      if(strategy?.state==="detected"&&markers.length){state.textContent="Служба v1 активна · найдены метки";for(const marker of markers){const chip=document.createElement("span");chip.className="strategy-marker";chip.textContent=marker;target.append(chip)}}
+      else if(strategy?.state==="unavailable"){state.textContent="Конфигурация или известные метки не найдены";target.textContent="—"}
+      else{state.textContent="Не читается · Zapret v1 не активен или работает Zapret2";target.textContent="—"}
+    }
     async function refresh(){
       const button=document.getElementById("refresh"),message=document.getElementById("message");button.disabled=true;message.className="notice";message.textContent="Получаю локальный отчёт от роутера…";
       try{const response=await fetch("/cgi-bin/routercare-status",{cache:"no-store",credentials:"same-origin"});if(!response.ok)throw new Error("HTTP "+response.status);const d=await response.json();
         text("model",d.model||d.board);text("release",d.release);text("arch",d.arch);text("overlay",Number.isFinite(d.overlay_free_kib)?(d.overlay_free_kib/1024).toFixed(1)+" МБ":"нет данных");
-        setService("zapret-status",d.services?.zapret);setService("zapret2",d.services?.zapret2);setService("mihomo-service",d.services?.mihomo);updateDpiConflict(d.services);
+        setService("zapret-status",d.services?.zapret);setService("zapret2",d.services?.zapret2);setService("mihomo-service",d.services?.mihomo);updateDpiConflict(d.services);updateStrategy(d.strategy);
         text("checked",d.checked_at?"Проверено · "+new Date(d.checked_at).toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"}):"Состояние обновлено");text("headline","Роутер на связи");document.getElementById("subhead").textContent="Локальный отчёт получен. Сетевые настройки и правила OpenWrt не менялись.";setConnectionState(true);text("connection-label","РОУТЕР НА СВЯЗИ");
         message.textContent="Отчёт обработан локально. Внешние серверы и аналитика не используются.";
-      }catch(e){setService("zapret-status","unknown");setService("zapret2","unknown");setService("mihomo-service","unknown");updateDpiConflict({});text("headline","Нет связи с локальной проверкой");document.getElementById("subhead").textContent="Проверьте установку панели и доступность CGI на роутере.";setConnectionState(false);text("connection-label","НЕТ СВЯЗИ");message.className="notice error";message.textContent="Локальный API не ответил: "+e.message+". Конфигурация роутера не менялась."}
+      }catch(e){setService("zapret-status","unknown");setService("zapret2","unknown");setService("mihomo-service","unknown");updateDpiConflict({});updateStrategy(null);text("headline","Нет связи с локальной проверкой");document.getElementById("subhead").textContent="Проверьте установку панели и доступность CGI на роутере.";setConnectionState(false);text("connection-label","НЕТ СВЯЗИ");message.className="notice error";message.textContent="Локальный API не ответил: "+e.message+". Конфигурация роутера не менялась."}
       finally{button.disabled=false}
     }
     async function checkMihomo(){
@@ -161,7 +182,7 @@
     function parseConsoleCommand(raw){const command=String(raw||"").trim().toLowerCase();return ["help","status","config-test","clear"].includes(command)?command:null}
     const consoleOutput=document.getElementById("console-output"),consoleInput=document.getElementById("console-input");
     function consoleWrite(lines){consoleOutput.textContent+=(consoleOutput.textContent.endsWith("\n")?"":"\n")+lines;consoleOutput.scrollTop=consoleOutput.scrollHeight}
-    async function runConsoleCommand(raw){const command=parseConsoleCommand(raw);if(!command){consoleWrite("\nzapret $ "+String(raw||"").trim()+"\nКоманда не разрешена. Введите help.");return}if(command==="clear"){consoleOutput.textContent="OpenWrt Zapret · диагностическая консоль\nЭкран очищен. Данные и настройки не менялись.";consoleInput.value="";return}consoleWrite("\nzapret $ "+command);if(command==="help"){consoleWrite("Разрешённые команды:\n  help        показать эту справку\n  status      прочитать локальный статус служб\n  config-test проверить синтаксис Mihomo без вывода конфига\n  clear       очистить экран\n\nДругие команды и аргументы отключены.");return}if(command==="status"){await refresh();const labels=["model","release","arch","overlay","zapret-status","zapret2","mihomo-service"].map(id=>document.getElementById(id)?.textContent||"нет данных");consoleWrite("Статус из локального CGI:\nМодель: "+labels[0]+"\nOpenWrt: "+labels[1]+"\nАрхитектура: "+labels[2]+"\nСвободно в overlay: "+labels[3]+"\nZapret v1: "+labels[4]+"\nZapret2: "+labels[5]+"\nMihomo: "+labels[6]+"\n\nЭто статус службы, а не тест прохождения трафика.");return}if(command==="config-test"){await checkMihomo();consoleWrite("Результат: "+(document.getElementById("mihomo-result")?.textContent||"проверка недоступна")+"\nСодержимое и секреты не выводились.")}}
+    async function runConsoleCommand(raw){const command=parseConsoleCommand(raw);if(!command){consoleWrite("\nzapret $ "+String(raw||"").trim()+"\nКоманда не разрешена. Введите help.");return}if(command==="clear"){consoleOutput.textContent="OpenWrt Zapret · диагностическая консоль\nЭкран очищен. Данные и настройки не менялись.";consoleInput.value="";return}consoleWrite("\nzapret $ "+command);if(command==="help"){consoleWrite("Разрешённые команды:\n  help        показать эту справку\n  status      прочитать локальный статус служб\n  config-test проверить синтаксис Mihomo без вывода конфига\n  clear       очистить экран\n\nДругие команды и аргументы отключены.");return}if(command==="status"){await refresh();const labels=["model","release","arch","overlay","zapret-status","zapret2","mihomo-service"].map(id=>document.getElementById(id)?.textContent||"нет данных"),strategy=document.getElementById("strategy-state")?.textContent||"нет данных",markers=[...document.getElementById("strategy-markers").children].map(item=>item.textContent).join(" / ")||"—";consoleWrite("Статус из локального CGI:\nМодель: "+labels[0]+"\nOpenWrt: "+labels[1]+"\nАрхитектура: "+labels[2]+"\nСвободно в overlay: "+labels[3]+"\nZapret v1: "+labels[4]+"\nZapret2: "+labels[5]+"\nMihomo: "+labels[6]+"\nСтратегия v1: "+strategy+"\nМетки: "+markers+"\n\nЭто статус службы, а не тест прохождения трафика.");return}if(command==="config-test"){await checkMihomo();consoleWrite("Результат: "+(document.getElementById("mihomo-result")?.textContent||"проверка недоступна")+"\nСодержимое и секреты не выводились.")}}
     document.getElementById("console-form").addEventListener("submit",event=>{event.preventDefault();const command=consoleInput.value;consoleInput.value="";runConsoleCommand(command)});
     for(const button of document.querySelectorAll("[data-console-command]"))button.addEventListener("click",()=>runConsoleCommand(button.dataset.consoleCommand));
     const navLinks=[...document.querySelectorAll('.nav a[href^="#"]')];
