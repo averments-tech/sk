@@ -13,6 +13,7 @@ fail() { printf 'Ошибка: %s\n' "$1" >&2; exit 1; }
 
 [ "$(id -u)" = 0 ] || fail 'запустите установщик от root через SSH.'
 [ -f "$ROOT_DIR/www/routercare/index.html" ] || fail 'не найдена страница www/routercare/index.html.'
+[ -f "$ROOT_DIR/www/routercare/strategy-candidates.json" ] || fail 'не найден локальный каталог стратегий.'
 [ -f "$ROOT_DIR/www/cgi-bin/routercare-status" ] || fail 'не найден CGI www/cgi-bin/routercare-status.'
 [ -f "$ROOT_DIR/www/cgi-bin/routercare-mihomo-check" ] || fail 'не найден CGI www/cgi-bin/routercare-mihomo-check.'
 [ -d /www ] || fail 'каталог /www не найден; конфигурация веб-сервера не изменялась.'
@@ -31,13 +32,15 @@ fi
 
 mkdir -p "$WEB_DIR"
 cp "$ROOT_DIR/www/routercare/index.html" "$WEB_DIR/index.html"
+cp "$ROOT_DIR/www/routercare/strategy-candidates.json" "$WEB_DIR/strategy-candidates.json"
 cp "$ROOT_DIR/www/cgi-bin/routercare-status" "$CGI_FILE"
 cp "$ROOT_DIR/www/cgi-bin/routercare-mihomo-check" "$MIHOMO_CGI_FILE"
 chmod 0644 "$WEB_DIR/index.html"
+chmod 0644 "$WEB_DIR/strategy-candidates.json"
 chmod 0755 "$CGI_FILE"
 chmod 0755 "$MIHOMO_CGI_FILE"
 
-printf 'OpenWrt Zapret 0.5.15 установлена.\n'
+printf 'OpenWrt Zapret 0.5.16 установлена.\n'
 printf 'Страница: http://<адрес-роутера>/routercare/\n'
 printf 'Резервная копия заменённых файлов: %s\n' "$BACKUP_ROOT/$STAMP"
 printf 'Меню, firewall, DNS и службы не менялись.\n'

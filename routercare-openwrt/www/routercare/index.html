@@ -31,7 +31,16 @@
     .strategy-grid{display:grid;grid-template-columns:minmax(140px,.55fr) minmax(0,1fr);gap:9px}
     .strategy-markers{display:flex;flex-wrap:wrap;gap:6px;margin-top:5px}
     .strategy-marker{padding:3px 7px;border:1px solid #dbe5f6;border-radius:6px;background:#edf2ff;color:#3158b8;font:700 10px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace}
-    @media(max-width:600px){.strategy-grid{grid-template-columns:1fr}}
+    .candidate-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
+    .candidate-card{min-width:0;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px}
+    .candidate-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+    .candidate-head strong{font-size:13px}
+    .candidate-tag{padding:3px 7px;border-radius:999px;background:var(--ui-tint);color:var(--ui-ink);font-size:10px;font-weight:750;white-space:nowrap}
+    .candidate-card p{margin:7px 0;color:var(--muted);font-size:11px;line-height:1.55}
+    .candidate-card pre{max-width:100%;overflow:auto;margin:9px 0;padding:10px;border-radius:8px;background:#0b1220;color:#d7e4ff;font:10px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre}
+    .candidate-notice{margin-top:11px;padding:9px 11px;border-left:3px solid #d99520;border-radius:5px;background:#fff7e8;color:#725014;font-size:11px;line-height:1.5}
+    @media(max-width:800px){.candidate-list{grid-template-columns:1fr 1fr}}
+    @media(max-width:600px){.strategy-grid{grid-template-columns:1fr}.candidate-list{grid-template-columns:1fr}}
     @media(prefers-reduced-motion:reduce){.strategy-panel{scroll-behavior:auto}}
   </style>
 </head>
@@ -54,7 +63,7 @@
       </nav>
       <div class="side-spacer"></div>
       <div class="local-card"><div class="local-top"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v5c0 4.6 2.9 8.3 7 10 4.1-1.7 7-5.4 7-10V6l-7-3Z" stroke="currentColor" stroke-width="1.7"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Локальная диагностика</div><p>Данные остаются на роутере. Внешняя аналитика отключена.</p></div>
-      <div class="side-version"><span>OpenWrt Zapret</span><b>0.5.15</b></div>
+      <div class="side-version"><span>OpenWrt Zapret</span><b>0.5.16</b></div>
     </aside>
     <main class="main" id="overview">
       <header class="topbar">
@@ -79,6 +88,9 @@
           <div class="panel-head"><span class="service-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M5 4h14v16H5zM8 8h8M8 12h5M8 16h8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><h3 id="strategy-title">Стратегия Zapret v1</h3><p>Только чтение известных меток · без переключения</p></div></div>
           <div class="strategy-grid"><div class="system-item"><span>Состояние</span><strong id="strategy-state" role="status" aria-live="polite">Получаю данные…</strong></div><div class="system-item"><span>Метки в конфигурации</span><div class="strategy-markers" id="strategy-markers">—</div></div></div>
           <p class="diagnostic-hint">Читаются только метки vN, YvN, DvN, GvN и udp443 из <code>/etc/config/zapret</code> при активном Zapret v1. Это не проверка обхода; строки параметров не показываются.</p>
+          <div class="panel-head" style="margin-top:17px"><span class="service-icon blue"><svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16v14H4zM8 9h8M8 12h5M8 15h8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><h3>Наши TCP-кандидаты</h3><p>Оригинальные минимальные комбинации · тест только вне панели</p></div></div>
+          <div class="candidate-list" id="strategy-candidates" aria-live="polite"><p class="diagnostic-hint">Загружаю локальный каталог…</p></div>
+          <div class="candidate-notice"><strong>Важно:</strong> это не готовая настройка для любого роутера. Профили проверены по набору параметров upstream, но не проверены на вашем провайдере и не применяются автоматически. Для ручного теста нужен действующий путь к hostlist из вашей установки; не запускайте v1 вместе с Zapret2.</div>
         </section>
       </section>
       <section class="panel domain-check" id="list-check" aria-labelledby="list-check-title">
@@ -109,7 +121,7 @@
         </div>
         <p class="console-note"><strong>Безопасный режим.</strong> Консоль принимает только четыре команды: справка, чтение статуса через локальный CGI, тест конфигурации Mihomo без вывода содержимого и очистка экрана. Shell-команды, аргументы, установка и изменение настроек не выполняются.</p>
       </section>
-      <footer class="footer"><span><strong>OpenWrt Zapret 0.5.15</strong> · локальная диагностика</span><span>Для домашней сети · не публикуйте панель в интернет</span></footer>
+      <footer class="footer"><span><strong>OpenWrt Zapret 0.5.16</strong> · локальная диагностика</span><span>Для домашней сети · не публикуйте панель в интернет</span></footer>
     </main>
   </div>
   <script>
@@ -131,6 +143,27 @@
       if(strategy?.state==="detected"&&markers.length){state.textContent="Служба v1 активна · найдены метки";for(const marker of markers){const chip=document.createElement("span");chip.className="strategy-marker";chip.textContent=marker;target.append(chip)}}
       else if(strategy?.state==="unavailable"){state.textContent="Конфигурация или известные метки не найдены";target.textContent="—"}
       else{state.textContent="Не читается · Zapret v1 не активен или работает Zapret2";target.textContent="—"}
+    }
+    async function loadStrategyCandidates(){
+      const target=document.getElementById("strategy-candidates");
+      try{
+        const response=await fetch("strategy-candidates.json",{cache:"no-store"});
+        if(!response.ok)throw new Error("catalog unavailable");
+        const catalog=await response.json();
+        if(catalog.schema!==1||!Array.isArray(catalog.profiles))throw new Error("invalid catalog");
+        target.replaceChildren();
+        for(const profile of catalog.profiles.slice(0,3)){
+          const card=document.createElement("article");card.className="candidate-card";
+          const head=document.createElement("div");head.className="candidate-head";
+          const title=document.createElement("strong");title.textContent=profile.title;
+          const tag=document.createElement("span");tag.className="candidate-tag";tag.textContent=profile.tag;
+          head.append(title,tag);
+          const description=document.createElement("p");description.textContent=profile.description;
+          const pre=document.createElement("pre");pre.textContent=profile.options.join("\n");
+          const scope=document.createElement("p");scope.textContent=profile.scope;
+          card.append(head,description,pre,scope);target.append(card)
+        }
+      }catch(error){target.textContent="Локальный каталог кандидатов недоступен. Остальные функции панели работают отдельно."}
     }
     async function refresh(){
       const button=document.getElementById("refresh"),message=document.getElementById("message");button.disabled=true;message.className="notice";message.textContent="Получаю локальный отчёт от роутера…";
@@ -203,7 +236,7 @@
     const domainInput=document.getElementById("domain-input"),domainResult=document.getElementById("domain-result");
     document.getElementById("domain-check-button").addEventListener("click",()=>renderDomainCheck(inspectDomainList(domainInput.value)));
     document.getElementById("domain-clear-button").addEventListener("click",()=>{domainInput.value="";domainResult.textContent="Список очищен. Данные не сохранялись."});
-    document.getElementById("refresh").addEventListener("click",refresh);document.getElementById("mihomo-check").addEventListener("click",checkMihomo);refresh();
+    document.getElementById("refresh").addEventListener("click",refresh);document.getElementById("mihomo-check").addEventListener("click",checkMihomo);loadStrategyCandidates();refresh();
   </script>
 </body>
 </html>

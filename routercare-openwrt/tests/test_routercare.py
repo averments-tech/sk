@@ -72,8 +72,10 @@ class OpenWrtZapretTests(unittest.TestCase):
         self.assertIn("color-scheme:light", self.html)
         self.assertIn("theme-color", self.html)
         self.assertNotRegex(self.html, r"https?://(?:fonts\.googleapis|cdnjs|cdn\.)")
-        self.assertIn("OpenWrt Zapret 0.5.15", self.html)
-        self.assertIn("<b>0.5.15</b>", self.html)
+        self.assertIn("OpenWrt Zapret 0.5.16", self.html)
+        self.assertIn("<b>0.5.16</b>", self.html)
+        self.assertIn('fetch("strategy-candidates.json"', self.html)
+        self.assertIn("не применяются автоматически", self.html)
     def test_navigation_only_targets_live_panel_sections(self) -> None:
         for target in ("overview", "zapret-service", "list-check", "mihomo", "system", "console"):
             self.assertIn(f'href="#{target}"', self.html)
@@ -227,7 +229,7 @@ for(const command of ['status; reboot','status arg','sh','help\\nrm -rf /','']) 
                       (root / "install.sh").read_text(encoding="utf-8"))
         self.assertIn('exec "$ROOT_DIR/routercare-openwrt/uninstall.sh" "$@"',
                       (root / "uninstall.sh").read_text(encoding="utf-8"))
-        self.assertIn("OpenWrt Zapret 0.5.15 установлена",
+        self.assertIn("OpenWrt Zapret 0.5.16 установлена",
                       (ROOT / "install.sh").read_text(encoding="utf-8"))
     def test_status_cgi_returns_well_formed_service_json(self) -> None:
         headers, body = run_cgi("www/cgi-bin/routercare-status", "GET")
@@ -264,6 +266,36 @@ for(const command of ['status; reboot','status arg','sh','help\\nrm -rf /','']) 
                                              capture_output=True, check=True).stdout
             conflict_body = json.loads(re.split(r"\r?\n\r?\n", conflict_output, maxsplit=1)[1])
             self.assertEqual(conflict_body["strategy"], {"state": "not_applicable", "markers": ""})
+
+    def test_strategy_candidates_use_documented_minimal_nfqw_options_only(self) -> None:
+        path = ROOT / "www/routercare/strategy-candidates.json"
+        catalog = json.loads(path.read_text(encoding="utf-8"))
+        self.assertEqual(catalog["schema"], 1)
+        self.assertEqual(catalog["engine"], "Zapret v1 / nfqws")
+        self.assertTrue(catalog["hostlist_required"])
+        self.assertEqual(catalog["status"], "candidate-not-network-tested")
+        self.assertEqual(len(catalog["profiles"]), 3)
+        self.assertEqual(len({profile["id"] for profile in catalog["profiles"]}), 3)
+        supported = {"--filter-tcp", "--dpi-desync", "--dpi-desync-split-pos", "--dpi-desync-fake-tls"}
+        phases = {"fake": 1, "split2": 2, "multisplit": 2}
+        for profile in catalog["profiles"]:
+            options = profile["options"]
+            self.assertTrue(all(option.startswith("--") for option in options))
+            self.assertTrue(all(option.split("=", 1)[0] in supported for option in options))
+            self.assertIn("--filter-tcp=443", options)
+            self.assertFalse(any("/opt/" in option or "http" in option for option in options))
+            mode_line = next(option for option in options if option.startswith("--dpi-desync="))
+            modes = mode_line.split("=", 1)[1].split(",")
+            self.assertEqual([phases[mode] for mode in modes], sorted(phases[mode] for mode in modes))
+            split = next((option for option in options if option.startswith("--dpi-desync-split-pos=")), None)
+            if split:
+                self.assertTrue(set(split.split("=", 1)[1].split(",")) <= {"1", "sld+1"})
+            if "fake" in modes:
+                self.assertIn("--dpi-desync-fake-tls=!", options)
+        installer = (ROOT / "install.sh").read_text(encoding="utf-8")
+        uninstaller = (ROOT / "uninstall.sh").read_text(encoding="utf-8")
+        self.assertIn("strategy-candidates.json", installer)
+        self.assertIn("strategy-candidates.json", uninstaller)
 
     def test_mihomo_checker_rejects_non_get_without_running_a_check(self) -> None:
         headers, body = run_cgi("www/cgi-bin/routercare-mihomo-check", "POST")

@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "engine": "Zapret v1 / nfqws",
+  "status": "candidate-not-network-tested",
+  "source_reviewed": "2026-10-18",
+  "hostlist_required": true,
+  "profiles": [
+    {
+      "id": "first-split",
+      "title": "Первое разделение",
+      "tag": "Минимальный",
+      "description": "Короткий тестовый вариант с одним разделением TCP-потока.",
+      "options": [
+        "--filter-tcp=443",
+        "--dpi-desync=split2",
+        "--dpi-desync-split-pos=1"
+      ],
+      "scope": "Сочетайте только с существующим hostlist и локальным тестом нужного домена."
+    },
+    {
+      "id": "sld-multisplit",
+      "title": "Разделение около домена",
+      "tag": "MultiSplit",
+      "description": "Два положения разделения: начало потока и граница второго уровня домена.",
+      "options": [
+        "--filter-tcp=443",
+        "--dpi-desync=multisplit",
+        "--dpi-desync-split-pos=1,sld+1"
+      ],
+      "scope": "Нужен существующий hostlist; набор позиций зависит от домена и не гарантирует результат."
+    },
+    {
+      "id": "fake-sld-multisplit",
+      "title": "Fake + разделение",
+      "tag": "Доп. пакеты",
+      "description": "Fake TLS перед MultiSplit; использует стандартный fake из nfqws без внешнего файла.",
+      "options": [
+        "--filter-tcp=443",
+        "--dpi-desync=fake,multisplit",
+        "--dpi-desync-fake-tls=!",
+        "--dpi-desync-split-pos=1,sld+1"
+      ],
+      "scope": "Больше пакетов и нагрузки. Нужны hostlist и локальная проверка; начните с первого профиля."
+    }
+  ]
+}
