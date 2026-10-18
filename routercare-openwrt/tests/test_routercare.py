@@ -71,8 +71,8 @@ class OpenWrtZapretTests(unittest.TestCase):
         self.assertIn("theme-color", self.html)
         self.assertIn("prefers-reduced-motion:reduce", self.html)
         self.assertNotRegex(self.html, r"https?://(?:fonts\.googleapis|cdnjs|cdn\.)")
-        self.assertIn("OpenWrt Zapret 0.5.12", self.html)
-        self.assertIn("<b>0.5.12</b>", self.html)
+        self.assertIn("OpenWrt Zapret 0.5.13", self.html)
+        self.assertIn("<b>0.5.13</b>", self.html)
 
 
     def test_shortcut_cards_are_accessible_and_target_real_sections(self) -> None:
@@ -113,6 +113,31 @@ assert.equal(result.invalid[0].line,5);
         self.assertIn("prefers-reduced-motion:reduce", self.html)
         self.assertNotRegex(self.html, r"https?://(?:fonts\\.googleapis|cdnjs|cdn\\.)")
 
+    def test_ten_theme_variants_are_local_and_console_commands_are_allowlisted(self) -> None:
+        options = re.findall(r'<option value="([a-z]+)">', self.html)
+        self.assertEqual(options, ["cobalt", "apple", "violet", "ocean", "mint",
+                                   "emerald", "rose", "amber", "coral", "graphite"])
+        self.assertIn('id="theme-picker"', self.html)
+        self.assertIn('localStorage.setItem("openwrt-zapret-theme"', self.html)
+        self.assertIn('id="console"', self.html)
+        self.assertIn('class="console-state">SHELL OFF', self.html)
+        self.assertIn("локального CGI", self.html)
+        self.assertIn("произвольный shell отключён", self.html)
+        self.assertIn('data-console-command="config-test"', self.html)
+        self.assertIn('data-console-command="status"', self.html)
+        self.assertIn('data-console-command="clear"', self.html)
+        self.assertIn('data-console-command="help"', self.html)
+
+        start = self.html.index("    function parseConsoleCommand(raw){")
+        end = self.html.index("\n    const consoleOutput", start)
+        parser = self.html[start:end]
+        harness = parser + """
+const assert=require('node:assert/strict');
+for(const command of ['help','status','config-test','clear']) assert.equal(parseConsoleCommand(command),command);
+for(const command of ['status; reboot','status arg','sh','help\\nrm -rf /','']) assert.equal(parseConsoleCommand(command),null);
+"""
+        subprocess.run(["node", "-e", harness], check=True)
+
     def test_light_console_redesign_is_local_and_reduced_motion_safe(self) -> None:
         self.assertIn('id="light-console-redesign"', self.html)
         self.assertIn("--paper:#f4f7fb", self.html)
@@ -131,7 +156,7 @@ assert.equal(result.invalid[0].line,5);
         for source in ("vless", "vmess", "trojan", "hysteria2", "tuic", "wg", "shadowsocks", "anytls", "http", "socks"):
             self.assertIn(f"https://wiki.metacubex.one/en/config/proxies/{source}/", self.html)
         start = self.html.index("    function protocolMatches(filter,transports){")
-        end = self.html.index("    function filterProtocolCards(filter){", start)
+        end = self.html.index("    function parseConsoleCommand(raw){", start)
         function = self.html[start:end]
         harness = function + """
 const assert=require('node:assert/strict');
@@ -168,14 +193,14 @@ assert.equal(protocolMatches('tcp','udp'),false);
         for service_id in ("zapret-status", "zapret2", "mihomo-service"):
             self.assertIn(f'setService("{service_id}","unknown")', body)
 
-    def test_accessible_platform_badges_and_local_accent_toggle(self) -> None:
+    def test_accessible_platform_badges_and_local_theme_picker(self) -> None:
         self.assertIn('aria-label="Клиентские платформы: macOS и Linux через браузер"', self.html)
         self.assertIn(">macOS</span>", self.html)
         self.assertIn(">Linux</span>", self.html)
-        self.assertIn('id="theme-toggle"', self.html)
-        self.assertIn('aria-pressed="false"', self.html)
-        self.assertIn('localStorage.setItem("openwrt-zapret-accent"', self.html)
-        self.assertIn("themeToggle.addEventListener(\"click\"", self.html)
+        self.assertIn('id="theme-picker"', self.html)
+        self.assertIn('aria-label="Выбрать цветовой вариант панели"', self.html)
+        self.assertIn('localStorage.setItem("openwrt-zapret-theme"', self.html)
+        self.assertIn('themePicker.addEventListener("change"', self.html)
 
     def test_flow_animation_tracks_local_api_state(self) -> None:
         self.assertIn('class="flow-track"', self.html)
@@ -227,7 +252,7 @@ assert.equal(protocolMatches('tcp','udp'),false);
                       (root / "install.sh").read_text(encoding="utf-8"))
         self.assertIn('exec "$ROOT_DIR/routercare-openwrt/uninstall.sh" "$@"',
                       (root / "uninstall.sh").read_text(encoding="utf-8"))
-        self.assertIn("OpenWrt Zapret 0.5.12 установлена",
+        self.assertIn("OpenWrt Zapret 0.5.13 установлена",
                       (ROOT / "install.sh").read_text(encoding="utf-8"))
 
     def test_status_cgi_returns_well_formed_service_json(self) -> None:
