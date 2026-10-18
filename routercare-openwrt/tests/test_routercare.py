@@ -63,28 +63,23 @@ class OpenWrtZapretTests(unittest.TestCase):
 
     def test_ui_keeps_reduced_motion_and_local_assets(self) -> None:
         self.assertIn("prefers-reduced-motion:reduce", self.html)
-        self.assertIn('class="shortcut-grid"', self.html)
-        self.assertIn("Быстрый переход по панели", self.html)
+        self.assertNotIn('class="shortcut-grid"', self.html)
+        self.assertNotIn('id="compatibility"', self.html)
+        self.assertNotIn('id="protocols"', self.html)
         self.assertIn("skip-link", self.html)
         self.assertIn('content="light"', self.html)
         self.assertIn("color-scheme:light", self.html)
         self.assertIn("theme-color", self.html)
-        self.assertIn("prefers-reduced-motion:reduce", self.html)
         self.assertNotRegex(self.html, r"https?://(?:fonts\.googleapis|cdnjs|cdn\.)")
-        self.assertIn("OpenWrt Zapret 0.5.13", self.html)
-        self.assertIn("<b>0.5.13</b>", self.html)
-
-
-    def test_shortcut_cards_are_accessible_and_target_real_sections(self) -> None:
-        self.assertIn('<nav class="shortcut-grid" aria-label="Быстрый переход по панели">', self.html)
-        self.assertEqual(self.html.count('class="shortcut-card '), 4)
-        for target in ("zapret-service", "list-check", "protocols", "mihomo"):
+        self.assertIn("OpenWrt Zapret 0.5.14", self.html)
+        self.assertIn("<b>0.5.14</b>", self.html)
+    def test_navigation_only_targets_live_panel_sections(self) -> None:
+        for target in ("overview", "zapret-service", "list-check", "mihomo", "system", "console"):
             self.assertIn(f'href="#{target}"', self.html)
             self.assertIn(f'id="{target}"', self.html)
-        for marker in ("Списки доменов", "VPN-протоколы", "без импорта", "файл не меняется"):
-            self.assertIn(marker, self.html)
-        self.assertIn("@media(prefers-reduced-motion:reduce){.shortcut-card", self.html)
-
+        self.assertNotIn("shortcut-card", self.html)
+        self.assertNotIn("compat-section", self.html)
+        self.assertNotIn("protocol-section", self.html)
     def test_domain_list_validator_is_local_and_handles_duplicates_safely(self) -> None:
         self.assertIn('id="domain-input"', self.html)
         self.assertIn('id="domain-result" role="status" aria-live="polite"', self.html)
@@ -105,13 +100,6 @@ assert.equal(result.invalid[0].line,5);
 """
         subprocess.run(["node", "-e", harness], check=True)
 
-    def test_light_console_redesign_is_local_and_reduced_motion_safe(self) -> None:
-        self.assertIn('id="light-console-redesign"', self.html)
-        self.assertIn("--paper:#f4f7fb", self.html)
-        self.assertIn("Кобальт", self.html)
-        self.assertIn("Аметист", self.html)
-        self.assertIn("prefers-reduced-motion:reduce", self.html)
-        self.assertNotRegex(self.html, r"https?://(?:fonts\\.googleapis|cdnjs|cdn\\.)")
 
     def test_ten_theme_variants_are_local_and_console_commands_are_allowlisted(self) -> None:
         options = re.findall(r'<option value="([a-z]+)">', self.html)
@@ -144,30 +132,17 @@ for(const command of ['status; reboot','status arg','sh','help\\nrm -rf /','']) 
         self.assertIn("Кобальт", self.html)
         self.assertIn("Аметист", self.html)
         self.assertIn("prefers-reduced-motion:reduce", self.html)
-        self.assertIn("width:16px;height:16px;flex:0 0 16px", self.html)
+        self.assertNotIn("platform-chip", self.html)
         self.assertIn('content="light"', self.html)
 
-    def test_upstream_protocol_catalog_is_filterable_but_not_claimed_as_integrated(self) -> None:
-        self.assertIn('id="protocols"', self.html)
-        self.assertIn('id="protocol-result" role="status" aria-live="polite"', self.html)
-        self.assertIn("версия на роутере не подтверждена", self.html)
-        self.assertIn("Не интегрировано", self.html)
-        self.assertEqual(self.html.count('data-protocol-card data-transports='), 10)
-        for source in ("vless", "vmess", "trojan", "hysteria2", "tuic", "wg", "shadowsocks", "anytls", "http", "socks"):
-            self.assertIn(f"https://wiki.metacubex.one/en/config/proxies/{source}/", self.html)
-        start = self.html.index("    function protocolMatches(filter,transports){")
-        end = self.html.index("    function parseConsoleCommand(raw){", start)
-        function = self.html[start:end]
-        harness = function + """
-const assert=require('node:assert/strict');
-assert.equal(protocolMatches('all','tcp udp'),true);
-assert.equal(protocolMatches('tcp','tcp udp'),true);
-assert.equal(protocolMatches('udp','tcp udp'),true);
-assert.equal(protocolMatches('udp','tcp'),false);
-assert.equal(protocolMatches('tcp','udp'),false);
-"""
-        subprocess.run(["node", "-e", harness], check=True)
-
+    def test_removed_reference_catalog_stays_documented_outside_the_panel(self) -> None:
+        self.assertNotIn('id="protocols"', self.html)
+        self.assertNotIn('data-protocol-card', self.html)
+        sources = (ROOT / "SOURCES.md").read_text(encoding="utf-8")
+        for source in ("https://wiki.metacubex.one/en/config/proxies/vless/",
+                       "https://wiki.metacubex.one/en/config/proxies/hysteria2/",
+                       "https://github.com/bol-van/zapret2"):
+            self.assertIn(source, sources)
     def test_parallel_dpi_services_raise_read_only_warning(self) -> None:
         self.assertIn('id="dpi-conflict"', self.html)
         self.assertIn('role="status" aria-live="polite" hidden', self.html)
@@ -193,15 +168,14 @@ assert.equal(protocolMatches('tcp','udp'),false);
         for service_id in ("zapret-status", "zapret2", "mihomo-service"):
             self.assertIn(f'setService("{service_id}","unknown")', body)
 
-    def test_accessible_platform_badges_and_local_theme_picker(self) -> None:
-        self.assertIn('aria-label="Клиентские платформы: macOS и Linux через браузер"', self.html)
-        self.assertIn(">macOS</span>", self.html)
-        self.assertIn(">Linux</span>", self.html)
+    def test_theme_picker_is_local_and_platform_claims_are_removed(self) -> None:
+        self.assertNotIn("platform-row", self.html)
+        self.assertNotIn(">macOS</span>", self.html)
+        self.assertNotIn(">Linux</span>", self.html)
         self.assertIn('id="theme-picker"', self.html)
         self.assertIn('aria-label="Выбрать цветовой вариант панели"', self.html)
         self.assertIn('localStorage.setItem("openwrt-zapret-theme"', self.html)
         self.assertIn('themePicker.addEventListener("change"', self.html)
-
     def test_flow_animation_tracks_local_api_state(self) -> None:
         self.assertIn('class="flow-track"', self.html)
         self.assertIn("@media(prefers-reduced-motion:no-preference){.hero.is-online .packet", self.html)
@@ -252,9 +226,8 @@ assert.equal(protocolMatches('tcp','udp'),false);
                       (root / "install.sh").read_text(encoding="utf-8"))
         self.assertIn('exec "$ROOT_DIR/routercare-openwrt/uninstall.sh" "$@"',
                       (root / "uninstall.sh").read_text(encoding="utf-8"))
-        self.assertIn("OpenWrt Zapret 0.5.13 установлена",
+        self.assertIn("OpenWrt Zapret 0.5.14 установлена",
                       (ROOT / "install.sh").read_text(encoding="utf-8"))
-
     def test_status_cgi_returns_well_formed_service_json(self) -> None:
         headers, body = run_cgi("www/cgi-bin/routercare-status", "GET")
         self.assertIn("application/json", headers)
@@ -267,17 +240,14 @@ assert.equal(protocolMatches('tcp','udp'),false);
         self.assertIn("405 Method Not Allowed", headers)
         self.assertEqual(body, {"result": "method_not_allowed"})
 
-    def test_upstream_compatibility_map_is_read_only_and_linked(self) -> None:
-        self.assertIn('id="compatibility"', self.html)
-        self.assertIn('href="#compatibility"', self.html)
-        self.assertIn("https://github.com/StressOzz/Zapret-Manager/blob/main/Strategies.md", self.html)
-        self.assertIn("https://github.com/bol-van/zapret2", self.html)
-        self.assertIn("Импорт и применение не выполняются", self.html)
-        self.assertIn("настройки v1 не переносятся в Zapret2", self.html)
-        self.assertIn("Импорт подписок, WARP, Steer, Forkozz, AmneziaWG", self.html)
-        self.assertIn("код и списки из него в OpenWrt Zapret не копируются", self.html)
-        self.assertIn(".compat-grid{grid-template-columns:1fr}", self.html)
-
+    def test_upstream_sources_are_kept_in_docs_not_in_main_ui(self) -> None:
+        self.assertNotIn('id="compatibility"', self.html)
+        self.assertNotIn("Strategies.md", self.html)
+        sources = (ROOT / "SOURCES.md").read_text(encoding="utf-8")
+        for item in ("https://github.com/StressOzz/Zapret-Manager/blob/main/Strategies.md",
+                     "https://github.com/bol-van/zapret2",
+                     "Код, логотипы, стратегии и списки StressOzz не копировались"):
+            self.assertIn(item, sources)
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
